@@ -1,0 +1,12 @@
+Vagrant UP時にSSH auth method: private key･･･で詰まった話
+http://qiita.com/is_ryo/items/d67d29fc56cf3cd07199
+
+vagrantfileに以下を追記
+config.vm.provider "virtualbox" do |vb|
+    vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
+  end
+
+--cableconnected<1-N> on|off:
+実際にあるかのように、仮想ネットワークカードのケーブルを抜くことができます。
+これは、仮想マシン内の特定のソフトウェアコンポーネントをリセットするための役に立つかもしれません。
+

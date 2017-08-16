@@ -1,0 +1,45 @@
+VagrantでゲストのOSを入れ替えてVMを作成しようとしているのですが、エラーが出ます。
+
+    default: SSH address: 127.0.0.1:11020
+    default: SSH username: vagrant
+    default: SSH auth method: private key
+Timed out while waiting for the machine to boot. This means that
+Vagrant was unable to communicate with the guest machine within
+the configured ("config.vm.boot_timeout" value) time period.
+
+If you look above, you should be able to see the error(s) that
+Vagrant had when attempting to connect to the machine. These errors
+are usually good hints as to what may be wrong.
+
+If you're using a custom box, make sure that networking is properly
+working and you're able to connect to the machine. It is a common
+problem that networking isn't setup properly in these boxes.
+Verify that authentication configurations are also setup properly,
+as well.
+
+If the box appears to be booting properly, you may want to increase
+the timeout ("config.vm.boot_timeout") value.
+
+また、vagrant portコマンドで以下のエラーを出力
+
+There are errors in the configuration of this machine. Please fix
+the following errors and try again:
+
+vm:
+* A box must be specified.
+* Forwarded port definitions require a "host" and "guest" value
+* Ports to forward must be 1 to 65535
+* Ports to forward must be 1 to 65535
+* Ports to forward must be 1 to 65535
+* Ports to forward must be 1 to 65535
+* Ports to forward must be 1 to 65535
+* Ports to forward must be 1 to 65535
+* Ports to forward must be 1 to 65535
+
+shell provisioner:
+* Shell provisioner `args` must be a string or array.
+
+OSは、export CREATE_VAGRANT_OS_VER="centos7"で指定し、vagrant-env.shでVAGRANT_MACHINE_BOX_URLを書き換えています。
+（centos-7.2-x86_64-virtualbox-puppet-1.0.1.box⇒ネットから持ってきたvagrant-centos-7.3.box）
+
+このエラーについてご存知の方原因を教えていただけないでしょうか？

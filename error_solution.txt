@@ -98,7 +98,63 @@ xmlにexceptionLoggerクラスのbean定義を追加する。
 <bean id="exceptionLogger" class="org.terasoluna.gfw.common.exception.ExceptionLogger" />
 
 -------------------------------------------------------
+003
+使用環境
+STS+TERASOLUNA+Spring-test(Junit)+H2+mybatis+maven+spring-test-dbunit
 
+状況
+@DatabaseSetupアノテーションで、xmlファイルからデータをセットアップする
+
+エラー内容
+Caused by: java.lang.NoClassDefFoundError: org/dbunit/dataset/xml/FlatXmlDataSetBuilder
+	at com.github.springtestdbunit.dataset.FlatXmlDataSetLoader.createDataSet(FlatXmlDataSetLoader.java:36)
+	at com.github.springtestdbunit.dataset.AbstractDataSetLoader.loadDataSet(AbstractDataSetLoader.java:54)
+	at com.github.springtestdbunit.DbUnitRunner.loadDataset(DbUnitRunner.java:209)
+	at com.github.springtestdbunit.DbUnitRunner.loadDataSets(DbUnitRunner.java:192)
+	at com.github.springtestdbunit.DbUnitRunner.setupOrTeardown(DbUnitRunner.java:173)
+	at com.github.springtestdbunit.DbUnitRunner.beforeTestMethod(DbUnitRunner.java:75)
+	at com.github.springtestdbunit.DbUnitTestExecutionListener.beforeTestMethod(DbUnitTestExecutionListener.java:185)
+	at com.github.springtestdbunit.TestExecutionListenerChain$3.call(TestExecutionListenerChain.java:94)
+	at com.github.springtestdbunit.TestExecutionListenerChain.runChain(TestExecutionListenerChain.java:127)
+	... 24 common frames omitted
+	Caused by: java.lang.ClassNotFoundException: org.dbunit.dataset.xml.FlatXmlDataSetBuilder
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	... 33 common frames omitted
+
+原因
+@DatabaseSetupはspring-test-dbunitが提供している
+必要なライブラリが不足している。
+dbunitが提供している、「FlatXmlDataSetBuilder.class」が存在していないため
+
+解決策
+
+自分の設定していた、pom.xmlのmavenプラグインを確認
+<dependency>
+    <groupId>org.dbunit</groupId>
+    <artifactId>dbunit</artifactId>
+    <version>2.4.3</version>
+</dependency>
+
+Maven依存関係から org.dbunit.dataset.xml.FlatXmlDataSetBuilder.classを確認
+⇒存在しない
+
+バージョンを新しくして設定
+<dependency>
+    <groupId>org.dbunit</groupId>
+    <artifactId>dbunit</artifactId>
+    <version>2.5.3</version>
+</dependency>
+
+Maven依存関係から org.dbunit.dataset.xml.FlatXmlDataSetBuilder.classを確認
+⇒ある
+
+正常に動作
+
+
+-------------------------------------------------------
 
 
 

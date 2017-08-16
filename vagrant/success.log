@@ -1,0 +1,279 @@
+[terasoluna@terasoluna-ft 20]$ sh vagrant-destroy.sh
+using java type = OpenJDK
+using java version = 8.0.102
+using tomcat version = 8.0.27
+using postgresql jdbc version = postgresql-42.1.1.jar
+using oracle jdbc version     = ojdbc7-12.1.0.2.0.jar
+using javaMail version = javax.mail-1.5.6.jar
+using activation version = activation-1.1.jar
+using activemq version         = 5.13.4
+using activemq libs version    = activemq-libs-5.13.4
+using host machine ip address = 10.0.2.2
+using no_proxy = 10.0.2.2,tomcat8-20,localhost,127.0.0.1,.nttdata.co.jp
+using remote ip address = 10.0.2.0/24
+using host ssh               port = 11020
+using host munin             port = 11120
+using host tomcat            port = 11220
+using host spring func h2 db port = 11320
+using host gfw func h2 db    port = 11420
+using host tutorial h2 db    port = 24220
+using host httpd ssl         port = 23220
+using vm
+description = TERA2系動作検証用 by btitouknzf
+CentOS 7.3
+java type = OpenJDK
+java version = 8.0.102
+Tomcat version = 8.0.27
+commit 4a785137f5689fe62215cff1e3af981de3c12772
+    default: Are you sure you want to destroy the 'default' VM? [y/N] y
+==> default: Destroying VM and associated drives...
+[terasoluna@terasoluna-ft 20]$ sh vagrant-up.sh
+using java type = OpenJDK
+using java version = 8.0.102
+using tomcat version = 8.0.27
+using postgresql jdbc version = postgresql-42.1.1.jar
+using oracle jdbc version     = ojdbc7-12.1.0.2.0.jar
+using javaMail version = javax.mail-1.5.6.jar
+using activation version = activation-1.1.jar
+using activemq version         = 5.13.4
+using activemq libs version    = activemq-libs-5.13.4
+using host machine ip address = 10.0.2.2
+using no_proxy = 10.0.2.2,tomcat8-20,localhost,127.0.0.1,.nttdata.co.jp
+using remote ip address = 10.0.2.0/24
+using host ssh               port = 11020
+using host munin             port = 11120
+using host tomcat            port = 11220
+using host spring func h2 db port = 11320
+using host gfw func h2 db    port = 11420
+using host tutorial h2 db    port = 24220
+using host httpd ssl         port = 23220
+using vm
+description = TERA2系動作検証用 by btitouknzf
+CentOS 7.3
+java type = OpenJDK
+java version = 8.0.102
+Tomcat version = 8.0.27
+commit 4a785137f5689fe62215cff1e3af981de3c12772
+Bringing machine 'default' up with 'virtualbox' provider...
+==> default: Box 'tomcat8-20' could not be found. Attempting to find and install...
+    default: Box Provider: virtualbox
+    default: Box Version: >= 0
+==> default: Box file was not detected as metadata. Adding it directly...
+==> default: Adding box 'tomcat8-20' (v0) for provider: virtualbox
+    default: Unpacking necessary files from: file:///vagrant/centos-box/vagrant-centos-7.3.box
+==> default: Successfully added box 'tomcat8-20' (v0) for 'virtualbox'!
+==> default: Importing base box 'tomcat8-20'...
+==> default: Matching MAC address for NAT networking...
+==> default: Setting the name of the VM: tomcat8-20
+==> default: Clearing any previously set network interfaces...
+==> default: Preparing network interfaces based on configuration...
+    default: Adapter 1: nat
+==> default: Forwarding ports...
+    default: 22 (guest) => 11020 (host) (adapter 1)
+    default: 4949 (guest) => 11120 (host) (adapter 1)
+    default: 8080 (guest) => 11220 (host) (adapter 1)
+    default: 9202 (guest) => 11320 (host) (adapter 1)
+    default: 9192 (guest) => 11420 (host) (adapter 1)
+    default: 9212 (guest) => 24220 (host) (adapter 1)
+    default: 443 (guest) => 23220 (host) (adapter 1)
+==> default: Running 'pre-boot' VM customizations...
+==> default: Booting VM...
+==> default: Waiting for machine to boot. This may take a few minutes...
+    default: SSH address: 127.0.0.1:11020
+    default: SSH username: vagrant
+    default: SSH auth method: private key
+    default:
+    default: Vagrant insecure key detected. Vagrant will automatically replace
+    default: this with a newly generated keypair for better security.
+    default:
+    default: Inserting generated public key within guest...
+    default: Removing insecure key from the guest if it's present...
+    default: Key inserted! Disconnecting and reconnecting using new SSH key...
+==> default: Machine booted and ready!
+==> default: Configuring proxy environment variables...
+==> default: Configuring proxy for Yum...
+==> default: Checking for guest additions in VM...
+    default: The guest additions on this VM do not match the installed version of
+    default: VirtualBox! In most cases this is fine, but in rare cases it can
+    default: prevent things such as shared folders from working properly. If you see
+    default: shared folder errors, please make sure the guest additions within the
+    default: virtual machine match the version of VirtualBox you have installed on
+    default: your host and reload your VM.
+    default:
+    default: Guest Additions Version: 5.1.10
+    default: VirtualBox Version: 5.0
+==> default: Setting hostname...
+==> default: Mounting shared folders...
+    default: /vagrant => /vagrant/tomcat8/20
+==> default: Running provisioner: shell...
+    default: Running: /tmp/vagrant-shell20170731-7900-ufr9fc.sh
+==> default: ==== Create /var/vagrant/provision ====
+==> default: ==== environment variable settings ====
+==> default: Running provisioner: shell...
+    default: Running: /tmp/vagrant-shell20170731-7900-bezaee.sh
+==> default: ==== Japanese Configuration ====
+==> default: ---- Install Japanese Support ----
+==> default: Repodata is over 2 weeks old. Install yum-cron? Or run: yum makecache fast
+==> default: http://mirror.nus.edu.sg/centos/7.3.1611/os/x86_64/Packages/dconf-0.22.0-2.el7.x86_64.rpm: [Errno 14] curl#18 - "transfer closed with 155083 bytes remaining to read"
+==> default: Trying other mirror.
+==> default: ---- change locale ----
+==> default: ---- change keymap ----
+==> default: ---- change timezone ----
+==> default: Running provisioner: shell...
+    default: Running: /tmp/vagrant-shell20170731-7900-i4efn1.sh
+==> default: ==== create group/user ====
+==> default: ==== Install Emacs ====
+==> default: ==== Install NTP ====
+==> default: ==== Setting NTP ====
+==> default: //// NTP stop ////
+==> default: 31 Jul 10:35:38 ntpdate[14710]: adjust time server 163.135.10.16 offset -0.015677 sec
+==> default: ==== stop firewall ====
+==> default: ==== Install zip ====
+==> default: ==== Install unzip ====
+==> default: Running provisioner: shell...
+    default: Running: /tmp/vagrant-shell20170731-7900-20r43u.sh
+==> default: ==== Install OpenJDK8 ====
+==> default: Delta RPMs disabled because /usr/bin/applydeltarpm not installed.
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: 警告: ユーザー mockbuild は存在しません - root を使用します
+==> default: 警告: グループ mockbuild は存在しません - root を使用します
+==> default: Running provisioner: shell...
+    default: Running: /tmp/vagrant-shell20170731-7900-1lhv83m.sh
+==> default: ==== Install Munin Client ====
+==> default: Delta RPMs disabled because /usr/bin/applydeltarpm not installed.
+==> default: epel-release-7-10.noarch.rpm の公開鍵がインストールされていません
+==> default: 警告: /var/cache/yum/x86_64/7/epel/packages/epel-release-7-10.noarch.rpm: ヘッダー V3 RSA/SHA256 Signature、鍵 ID 352c64e5: NOKEY
+==> default: Importing GPG key 0x352C64E5:
+==> default:  Userid     : "Fedora EPEL (7) <epel@fedoraproject.org>"
+==> default:  Fingerprint: 91e9 7d7c 4a5e 96f1 7f3e 888f 6a2f aea2 352c 64e5
+==> default:  Package    : epel-release-7-8.noarch (installed)
+==> default:  From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+==> default: 警告: RPMDB は yum 以外で変更されました。
+==> default: ==== Install TOMCAT8 ====
+==> default: Created symlink from /etc/systemd/system/multi-user.target.wants/tomcat.service to /etc/systemd/system/tomcat.service.
+==> default: //// tomcat8 start ////
+==> default: ==== Install httpd ====
+==> default: Created symlink from /etc/systemd/system/multi-user.target.wants/httpd.service to /usr/lib/systemd/system/httpd.service.
+==> default: Generating RSA private key, 2048 bit long modulus
+==> default: .....
+==> default: ...........
+==> default: .......
+==> default: ................
+==> default: ...............
+==> default: ..........+++
+==> default: .....
+==> default: ................
+==> default: ................
+==> default: ........
+==> default: ............+++
+==> default: e is 65537 (0x10001)
+==> default: Signature ok
+==> default: subject=/C=JP/L=Default City/O=Default Company Ltd/CN=10.68.253.167
+==> default: Getting Private key
+==> default: writing RSA key
+==> default: 証明書がキーストアに追加されました
+==> default: //// httpd start ////
+[terasoluna@terasoluna-ft 20]$
