@@ -1,0 +1,104 @@
+エラー対処票
+-------------------------------------------------------
+使用環境
+
+状況
+
+エラー内容
+
+原因
+
+解決策
+
+-------------------------------------------------------
+
+001
+使用環境
+STS+TERASOLUNA+Spring-test(Junit)+H2+mybatis+maven
+
+状況
+テスト用にDBをH2で構築
+
+エラー内容
+Caused by: java.lang.ClassNotFoundException: org.h2.Driver
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at org.apache.commons.dbcp2.BasicDataSource.createConnectionFactory(BasicDataSource.java:2131)
+	... 50 common frames omitted
+	
+原因
+H2のライブラリとのパスが繋がっていない。
+
+解決策
+pom.xmlのprofilesにcom.h2databaseを設定する。
+
+	<profiles>
+        <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <resource.directory>src/main/resources</resource.directory>
+                <buildFinalName>${project.artifactId}-${project.version}</buildFinalName>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>test-server</id>
+            <properties>
+                <resource.directory>${basedir}/configs/test-server/resources</resource.directory>
+                <buildFinalName>${project.artifactId}-${project.version}-test-server</buildFinalName>
+            </properties>
+        </profile>
+        <profile>
+            <id>production-server</id>
+            <properties>
+                <resource.directory>${basedir}/configs/production-server/resources</resource.directory>
+                <buildFinalName>${project.artifactId}-${project.version}-production-server</buildFinalName>
+            </properties>
+        </profile>
+    </profiles>
+
+-------------------------------------------------------
+
+002
+使用環境
+STS+TERASOLUNA+Spring-test(Junit)+H2+mybatis+maven
+
+状況
+テスト用にDBをH2で構築
+test-context.xmlにてAOPの設定を行った
+
+エラー内容
+Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'exceptionLogger' available
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeanDefinition(DefaultListableBeanFactory.java:685)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getMergedLocalBeanDefinition(AbstractBeanFactory.java:1199)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:284)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:351)
+	... 59 common frames omitted
+	
+
+原因
+exceptionLoggerクラスが見つからない
+
+
+解決策
+xmlにexceptionLoggerクラスのbean定義を追加する。
+
+<bean id="exceptionLogger" class="org.terasoluna.gfw.common.exception.ExceptionLogger" />
+
+-------------------------------------------------------
+
+
+
+
