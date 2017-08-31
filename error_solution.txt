@@ -157,4 +157,444 @@ Maven依存関係から org.dbunit.dataset.xml.FlatXmlDataSetBuilder.classを確認
 -------------------------------------------------------
 
 
+-------------------------------------------------------
+使用環境
 
+状況
+antプロジェクトをmavenに変換し、実行しようとした
+
+
+エラー内容
+pom.xml 依存関係階層
+Project read error
+
+
+
+原因
+謎。でも実行できた
+
+
+解決策
+
+-------------------------------------------------------
+使用環境
+
+状況
+antプロジェクトをmavenに変換し、実行しようとした
+
+
+エラー内容
+
+
+
+原因
+
+
+
+解決策
+catalina.2017-08-28.log
+28-Aug-2017 14:21:24.567 情報 [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDescriptor 設定記述子 C:\develop\sts-bundle\pivotal-tc-server-developer-3.2.2.RELEASE\base-instance\conf\Catalina\localhost\terasoluna-security-validator-sampleapp.xml を配備します
+28-Aug-2017 14:21:24.622 警告 [localhost-startStop-1] org.apache.catalina.startup.SetContextPropertiesRule.begin [SetContextPropertiesRule]{Context} Setting property 'source' to 'org.eclipse.jst.jee.server:terasoluna-security-validator-sampleapp' did not find a matching property.
+28-Aug-2017 14:21:27.933 警告 [localhost-startStop-1] org.apache.tomcat.jdbc.pool.ConnectionPool.checkPoolConfiguration initialSize is larger than maxActive, setting initialSize to: 4
+28-Aug-2017 14:21:27.934 警告 [localhost-startStop-1] org.apache.tomcat.jdbc.pool.ConnectionPool.checkPoolConfiguration minIdle is larger than maxActive, setting minIdle to: 4
+28-Aug-2017 14:21:27.934 警告 [localhost-startStop-1] org.apache.tomcat.jdbc.pool.ConnectionPool.checkPoolConfiguration maxIdle is smaller than minIdle, setting maxIdle to: 4
+28-Aug-2017 14:21:28.876 情報 [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+28-Aug-2017 14:21:31.407 重大 [localhost-startStop-1] org.apache.catalina.core.StandardContext.startInternal One or more Filters failed to start. Full details will be found in the appropriate container log file
+28-Aug-2017 14:21:31.407 重大 [localhost-startStop-1] org.apache.catalina.core.StandardContext.startInternal 以前のエラーのためにコンテキストの起動が失敗しました [/terasoluna-security-validator-sampleapp]
+28-Aug-2017 14:21:31.430 警告 [localhost-startStop-1] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesJdbc The web application [terasoluna-security-validator-sampleapp] registered the JDBC driver [org.postgresql.Driver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.
+28-Aug-2017 14:21:31.436 情報 [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDescriptor Deployment of configuration descriptor C:\develop\sts-bundle\pivotal-tc-server-developer-3.2.2.RELEASE\base-instance\conf\Catalina\localhost\terasoluna-security-validator-sampleapp.xml has finished in 6,867 ms
+
+
+localhost.2017-08-28.log
+28-Aug-2017 15:02:39.006 情報 [localhost-startStop-1] org.apache.catalina.core.ApplicationContext.log Initializing Spring root WebApplicationContext
+28-Aug-2017 15:02:41.668 情報 [localhost-startStop-1] org.apache.catalina.core.ApplicationContext.log Initializing log4j from [classpath:log4j.properties]
+28-Aug-2017 15:02:41.688 重大 [localhost-startStop-1] org.apache.catalina.core.StandardContext.filterStart フィルタ securityValidateFilter の起動中の例外です
+ java.lang.ClassNotFoundException: jp.terasoluna.security.securityvalidator.filter.SecurityValidateFilter
+	at org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1285)
+	at org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1119)
+	at org.apache.catalina.core.DefaultInstanceManager.loadClass(DefaultInstanceManager.java:520)
+	at org.apache.catalina.core.DefaultInstanceManager.loadClassMaybePrivileged(DefaultInstanceManager.java:501)
+	at org.apache.catalina.core.DefaultInstanceManager.newInstance(DefaultInstanceManager.java:118)
+	at org.apache.catalina.core.ApplicationFilterConfig.getFilter(ApplicationFilterConfig.java:258)
+	at org.apache.catalina.core.ApplicationFilterConfig.<init>(ApplicationFilterConfig.java:105)
+	at org.apache.catalina.core.StandardContext.filterStart(StandardContext.java:4572)
+	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:5215)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:150)
+	at org.apache.catalina.core.ContainerBase.addChildInternal(ContainerBase.java:724)
+	at org.apache.catalina.core.ContainerBase.addChild(ContainerBase.java:700)
+	at org.apache.catalina.core.StandardHost.addChild(StandardHost.java:734)
+	at org.apache.catalina.startup.HostConfig.deployDescriptor(HostConfig.java:596)
+	at org.apache.catalina.startup.HostConfig$DeployDescriptor.run(HostConfig.java:1805)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+
+
+
+
+
+mavenとweb-inf/libの読み込みがうまく出来てない
+http://www.tekboy.net/archives/673
+
+
+
+-------------------------------------------------------
+
+
+
+
+
+NEXUSからmavenを使おうとした
+
+
+
+ビルド中にエラーが発生しました。
+プロジェクト 'terasoluna-security-validator-sampleapp' でビルダー 'Maven プロジェクト・ビルダー' の実行中にエラーが発生しました。
+ビルド・プランを計算できませんでした: Plugin org.apache.maven.plugins:maven-resources-plugin:2.6 or one of its dependencies could not be resolved: Failed to read artifact descriptor for org.apache.maven.plugins:maven-resources-plugin:jar:2.6
+Plugin org.apache.maven.plugins:maven-resources-plugin:2.6 or one of its dependencies could not be resolved: Failed to read artifact descriptor for org.apache.maven.plugins:maven-resources-plugin:jar:2.6
+ビルド・プランを計算できませんでした: Plugin org.apache.maven.plugins:maven-resources-plugin:2.6 or one of its dependencies could not be resolved: Failed to read artifact descriptor for org.apache.maven.plugins:maven-resources-plugin:jar:2.6
+Plugin org.apache.maven.plugins:maven-resources-plugin:2.6 or one of its dependencies could not be resolved: Failed to read artifact descriptor for org.apache.maven.plugins:maven-resources-plugin:jar:2.6
+
+
+説明	リソース	パス	ロケーション	型
+CoreException: ビルド・プランを計算できませんでした: Plugin org.apache.maven.plugins:maven-compiler-plugin:3.1 or one of its dependencies could not be resolved: Failed to read artifact descriptor for org.apache.maven.plugins:maven-compiler-plugin:jar:3.1: ArtifactResolutionException: Failure to transfer org.apache.maven.plugins:maven-compiler-plugin:pom:3.1 from https://repo1.x-network.jp/nexus/repository/maven_public/ was cached in the local repository, resolution will not be reattempted until the update interval of nexus has elapsed or updates are forced. Original error: Could not transfer artifact org.apache.maven.plugins:maven-compiler-plugin:pom:3.1 from/to nexus (https://repo1.x-network.jp/nexus/repository/maven_public/): Connection reset	pom.xml	/terasoluna-security-validator-sampleapp	行 7	Maven プロジェクト・ビルド・ライフサイクル・マッピング問題
+
+
+maven installで以下エラーが発生していた
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building terasoluna-security-validator-sampleapp 0.0.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] Downloading: https://repo1.x-network.jp/nexus/repository/maven_public/org/apache/maven/plugins/maven-resources-plugin/2.6/maven-resources-plugin-2.6.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 05:00 min
+[INFO] Finished at: 2017-08-29T14:00:03+09:00
+[INFO] Final Memory: 8M/123M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Plugin org.apache.maven.plugins:maven-resources-plugin:2.6 or one of its dependencies could not be resolved: Failed to read artifact descriptor for org.apache.maven.plugins:maven-resources-plugin:jar:2.6: Could not transfer artifact org.apache.maven.plugins:maven-resources-plugin:pom:2.6 from/to nexus (https://repo1.x-network.jp/nexus/repository/maven_public/): Connection reset -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/PluginResolutionException
+
+
+http://web.plus-idea.net/2016/08/eclipse-%E3%81%AEmarven%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E4%BD%9C%E6%88%90%E6%99%82%E3%81%ABcould-not-resolve-artifact-archetypes%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C/
+
+
+
+-------------------------------------------------------
+antプロジェクトをmaven化したときのエラー
+
+説明	リソース	パス	ロケーション	型
+コンテナー 'Web App ライブラリー' が存在しないライブラリー 'C:\work\TERAlibポータル移行 確認\AL047_動的コードリスト抽出・表示 ver1.1.1_maven\動的コードリスト抽出・表示 ver1.1.1\sample\functionsample-thin-taglibex\webapps\WEB-INF\lib\terasoluna-taglibex-1.1.0.jar' を参照しています	functionsample-thin-taglibex		ビルド・パス	ビルド・パス問題
+
+原因
+maven依存関係のライブラリがweb-inf/libと紐づいていないため。
+
+解決
+ビルドパスの構成⇒デプロイメント・アセンブリ⇒追加⇒Javaビルドパスエントリー⇒maven依存関係
+
+
+
+
+-------------------------------------------------------
+
+JasperException
+
+
+[2017/08/29 16:59:33][ERROR][RequestProcessorEx] sessionHash = A4E9901D1DA6E66AE70A52572ED5268FE50BDE56
+[2017/08/29 16:59:33][ERROR][RequestProcessorEx] org.apache.jasper.JasperException: /UC_A01_01/SC_A01_01_01.jsp (line: 241, column: 64) The JSP specification requires that an attribute name is preceded by whitespace
+	at org.apache.jasper.compiler.DefaultErrorHandler.jspError(DefaultErrorHandler.java:41)
+	at org.apache.jasper.compiler.ErrorDispatcher.dispatch(ErrorDispatcher.java:291)
+	at org.apache.jasper.compiler.ErrorDispatcher.jspError(ErrorDispatcher.java:97)
+	at org.apache.jasper.compiler.Parser.parseAttributes(Parser.java:171)
+	at org.apache.jasper.compiler.Parser.parseAttributes(Parser.java:160)
+	at org.apache.jasper.compiler.Parser.parseCustomTag(Parser.java:1254)
+	at org.apache.jasper.compiler.Parser.parseElements(Parser.java:1473)
+	at org.apache.jasper.compiler.Parser.parseBody(Parser.java:1686)
+	at org.apache.jasper.compiler.Parser.parseOptionalBody(Parser.java:1019)
+	at org.apache.jasper.compiler.Parser.parseCustomTag(Parser.java:1294)
+	at org.apache.jasper.compiler.Parser.parseElements(Parser.java:1473)
+	at org.apache.jasper.compiler.Parser.parseBody(Parser.java:1686)
+	at org.apache.jasper.compiler.Parser.parseOptionalBody(Parser.java:1019)
+	at org.apache.jasper.compiler.Parser.parseCustomTag(Parser.java:1294)
+	at org.apache.jasper.compiler.Parser.parseElements(Parser.java:1473)
+	at org.apache.jasper.compiler.Parser.parseBody(Parser.java:1686)
+	at org.apache.jasper.compiler.Parser.parseOptionalBody(Parser.java:1019)
+	at org.apache.jasper.compiler.Parser.parseCustomTag(Parser.java:1294)
+	at org.apache.jasper.compiler.Parser.parseElements(Parser.java:1473)
+	at org.apache.jasper.compiler.Parser.parseBody(Parser.java:1686)
+	at org.apache.jasper.compiler.Parser.parseOptionalBody(Parser.java:1019)
+	at org.apache.jasper.compiler.Parser.parseCustomTag(Parser.java:1294)
+	at org.apache.jasper.compiler.Parser.parseElements(Parser.java:1473)
+	at org.apache.jasper.compiler.Parser.parseBody(Parser.java:1686)
+	at org.apache.jasper.compiler.Parser.parseOptionalBody(Parser.java:1019)
+	at org.apache.jasper.compiler.Parser.parseCustomTag(Parser.java:1294)
+	at org.apache.jasper.compiler.Parser.parseElements(Parser.java:1473)
+	at org.apache.jasper.compiler.Parser.parse(Parser.java:145)
+	at org.apache.jasper.compiler.ParserController.doParse(ParserController.java:244)
+	at org.apache.jasper.compiler.ParserController.parse(ParserController.java:105)
+	at org.apache.jasper.compiler.Compiler.generateJava(Compiler.java:201)
+	at org.apache.jasper.compiler.Compiler.compile(Compiler.java:372)
+	at org.apache.jasper.compiler.Compiler.compile(Compiler.java:349)
+	at org.apache.jasper.compiler.Compiler.compile(Compiler.java:333)
+	at org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:600)
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:368)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:385)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:329)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:729)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:230)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at org.apache.catalina.core.ApplicationDispatcher.invoke(ApplicationDispatcher.java:726)
+	at org.apache.catalina.core.ApplicationDispatcher.processRequest(ApplicationDispatcher.java:469)
+	at org.apache.catalina.core.ApplicationDispatcher.doForward(ApplicationDispatcher.java:394)
+	at org.apache.catalina.core.ApplicationDispatcher.forward(ApplicationDispatcher.java:311)
+	at org.apache.struts.action.RequestProcessor.doForward(RequestProcessor.java:1085)
+	at org.apache.struts.action.RequestProcessor.internalModuleRelativeForward(RequestProcessor.java:1023)
+	at org.apache.struts.action.RequestProcessor.processForward(RequestProcessor.java:572)
+	at org.apache.struts.action.RequestProcessor.process(RequestProcessor.java:221)
+	at jp.terasoluna.fw.web.struts.action.RequestProcessorEx.process(RequestProcessorEx.java:149)
+	at org.apache.struts.action.ActionServlet.process(ActionServlet.java:1196)
+	at org.apache.struts.action.ActionServlet.doPost(ActionServlet.java:432)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:648)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:729)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:230)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at org.apache.catalina.core.ApplicationDispatcher.invoke(ApplicationDispatcher.java:726)
+	at org.apache.catalina.core.ApplicationDispatcher.processRequest(ApplicationDispatcher.java:469)
+	at org.apache.catalina.core.ApplicationDispatcher.doForward(ApplicationDispatcher.java:394)
+	at org.apache.catalina.core.ApplicationDispatcher.forward(ApplicationDispatcher.java:311)
+	at org.apache.struts.action.RequestProcessor.doForward(RequestProcessor.java:1085)
+	at org.apache.struts.action.RequestProcessor.processForwardConfig(RequestProcessor.java:398)
+	at org.apache.struts.action.RequestProcessor.process(RequestProcessor.java:241)
+	at jp.terasoluna.fw.web.struts.action.RequestProcessorEx.process(RequestProcessorEx.java:149)
+	at org.apache.struts.action.ActionServlet.process(ActionServlet.java:1196)
+	at org.apache.struts.action.ActionServlet.doPost(ActionServlet.java:432)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:648)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:729)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:230)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at jp.terasoluna.fw.web.thin.AuthenticationControlFilter.doFilter(AuthenticationControlFilter.java:227)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at jp.terasoluna.fw.web.thin.ExtensionFilter.doFilter(ExtensionFilter.java:232)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:96)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:76)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:108)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:472)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:79)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:620)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:349)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:784)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:802)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1410)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:745)
+	
+	スペースがない
+	http://d.hatena.ne.jp/yamap_55/20130731/1375285126
+	
+	
+	-------------------------------------------------------
+	
+	コンソール警告
+	説明	リソース	パス	ロケーション	型
+Map は raw 型です。総称型 Map<K,V> への参照は、パラメーター化する必要があります	AbstractReportAction.java	/toursample-javaweb/sources/jp/terasoluna/toursample/common/action	行 150	Java 問題
+
+
+	[2017/08/29 17:18:53][WARN][RequestProcessor] 処理できない例外がスローされました: class java.lang.ClassCastException
+[2017/08/29 17:18:53][ERROR][RequestProcessorEx] sessionHash = 7758224AFBFBAFB35144128CFE70651A8CB2A9A3
+[2017/08/29 17:18:53][ERROR][RequestProcessorEx] javax.servlet.ServletException: java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Integer
+	at org.apache.struts.action.RequestProcessor.processException(RequestProcessor.java:535)
+	at org.apache.struts.action.RequestProcessor.processActionPerform(RequestProcessor.java:433)
+	at org.apache.struts.action.RequestProcessor.process(RequestProcessor.java:236)
+	at jp.terasoluna.fw.web.struts.action.RequestProcessorEx.process(RequestProcessorEx.java:149)
+	at org.apache.struts.action.ActionServlet.process(ActionServlet.java:1196)
+	at org.apache.struts.action.ActionServlet.doPost(ActionServlet.java:432)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:648)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:729)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:230)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at jp.terasoluna.fw.web.thin.AuthenticationControlFilter.doFilter(AuthenticationControlFilter.java:227)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at jp.terasoluna.fw.web.thin.ExtensionFilter.doFilter(ExtensionFilter.java:232)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:96)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:76)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:108)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:472)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:79)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:620)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:349)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:784)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:802)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1410)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Integer
+	at jp.terasoluna.toursample.uc_a01_01.blogic.RP_A01_01_01_02BLogicImpl.execute(RP_A01_01_01_02BLogicImpl.java:132)
+	at jp.terasoluna.toursample.uc_a01_01.blogic.RP_A01_01_01_02BLogicImpl.execute(RP_A01_01_01_02BLogicImpl.java:1)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:307)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:182)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:149)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:106)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:171)
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:89)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:171)
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:204)
+	at com.sun.proxy.$Proxy6.execute(Unknown Source)
+	at jp.terasoluna.fw.web.struts.actions.BLogicAction.doExecuteBLogic(BLogicAction.java:137)
+	at jp.terasoluna.fw.web.struts.actions.AbstractBLogicAction.doExecute(AbstractBLogicAction.java:278)
+	at jp.terasoluna.fw.web.struts.actions.ActionEx.execute(ActionEx.java:221)
+	at org.apache.struts.action.RequestProcessor.processActionPerform(RequestProcessor.java:431)
+	... 38 more
+java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Integer
+	at jp.terasoluna.toursample.uc_a01_01.blogic.RP_A01_01_01_02BLogicImpl.execute(RP_A01_01_01_02BLogicImpl.java:132)
+	at jp.terasoluna.toursample.uc_a01_01.blogic.RP_A01_01_01_02BLogicImpl.execute(RP_A01_01_01_02BLogicImpl.java:1)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:307)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:182)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:149)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:106)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:171)
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:89)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:171)
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:204)
+	at com.sun.proxy.$Proxy6.execute(Unknown Source)
+	at jp.terasoluna.fw.web.struts.actions.BLogicAction.doExecuteBLogic(BLogicAction.java:137)
+	at jp.terasoluna.fw.web.struts.actions.AbstractBLogicAction.doExecute(AbstractBLogicAction.java:278)
+	at jp.terasoluna.fw.web.struts.actions.ActionEx.execute(ActionEx.java:221)
+	at org.apache.struts.action.RequestProcessor.processActionPerform(RequestProcessor.java:431)
+	at org.apache.struts.action.RequestProcessor.process(RequestProcessor.java:236)
+	at jp.terasoluna.fw.web.struts.action.RequestProcessorEx.process(RequestProcessorEx.java:149)
+	at org.apache.struts.action.ActionServlet.process(ActionServlet.java:1196)
+	at org.apache.struts.action.ActionServlet.doPost(ActionServlet.java:432)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:648)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:729)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:230)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at jp.terasoluna.fw.web.thin.AuthenticationControlFilter.doFilter(AuthenticationControlFilter.java:227)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at jp.terasoluna.fw.web.thin.ExtensionFilter.doFilter(ExtensionFilter.java:232)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:96)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:76)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:192)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:165)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:108)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:472)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:79)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:620)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:349)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:784)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:802)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1410)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:745)
+	
+	
+	Map は raw 型です。総称型 Map<K,V> への参照は、パラメーター化する必要があります
+	Classはraw型です。総称型Class<T>への参照は、パラメーター化する必要があります
+	http://did2.blog64.fc2.com/blog-entry-299.html
+	Java1.5以降から
+List<String> list = new ArrayList<String>();
+みたいにあらかじめ宣言の時にそこに何が入るかの型を指定するようになってます。
+	https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1287653992
+	
+-------------------------------------------------------
+
+atomでsphinxを使用するときの設定
+http://qiita.com/tsujimitsu/items/907d7a2fae2057d0fb1f
+https://www.cresco.co.jp/blog/entry/955/
+
+
+必要なもの
+Atom
+パッケージ
+pandoc
+rst-preview-pandoc
+language-reStructuredText
+
+
+
+pandocのインストール
+環境変数を通す
+PATH
+C:\Users\terafw0672\AppData\Local\Pandoc
+
+pandoc --version
+で確認
+
+
+-------------------------------------------------------
+atomでエラー
+
+Uncaught Error: tunneling socket could not be established, statusCode=407
+stream.js:74
+Show Stack Trace
+This is likely a bug in Atom.
+Create issue on atom/atom
+
+
+http://d-and-i.hatenablog.com/entry/2016/09/19/090000
