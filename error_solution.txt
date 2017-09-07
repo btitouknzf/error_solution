@@ -285,7 +285,7 @@ maven installで以下エラーが発生していた
 [ERROR] For more information about the errors and possible solutions, please read the following articles:
 [ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/PluginResolutionException
 
-
+キャッシュされているフォルダを削除した
 http://web.plus-idea.net/2016/08/eclipse-%E3%81%AEmarven%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E4%BD%9C%E6%88%90%E6%99%82%E3%81%ABcould-not-resolve-artifact-archetypes%E3%81%AE%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C/
 
 
@@ -562,6 +562,22 @@ List<String> list = new ArrayList<String>();
 みたいにあらかじめ宣言の時にそこに何が入るかの型を指定するようになってます。
 	https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1287653992
 	
+	
+	https://amg-solution.jp/blog/10052
+	
+	
+	警告
+	説明	リソース	パス	ロケーション	型
+型の安全性: getParameterMap(ActionForm, HttpServletRequest) の型 RP_A01_05_01_01Action からの戻りの型 Map は、未検査の型変換を使用して型 AbstractReportAction<T> から Map<ActionMapping,HttpServletRequest> に準拠するようにする必要があります	RP_A01_05_01_01Action.java	/toursample-javaweb/sources/jp/terasoluna/toursample/uc_a01_05/action	行 78	Java 問題
+
+	
+	説明	リソース	パス	ロケーション	型
+Map は raw 型です。総称型 Map<K,V> への参照は、パラメーター化する必要があります	RP_A01_05_01_01Action.java	/toursample-javaweb/sources/jp/terasoluna/toursample/uc_a01_05/action	行 78	Java 問題
+
+	
+	
+	
+	
 -------------------------------------------------------
 
 atomでsphinxを使用するときの設定
@@ -598,3 +614,347 @@ Create issue on atom/atom
 
 
 http://d-and-i.hatenablog.com/entry/2016/09/19/090000
+
+
+
+
+-------------------------------------------------------
+使用環境
+postgresqlにmvnプロジェクトでDBを構築しようとした
+
+$ mvn -f atrs-initdb/pom.xml sql:execute
+
+状況
+
+
+
+エラー内容
+
+$ mvn -f atrs-initdb/pom.xml sql:execute
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building atrs-initdb 1.1.0.RELEASE
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] --- sql-maven-plugin:1.5:execute (default-cli) @ atrs-initdb ---
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 2.445 s
+[INFO] Finished at: 2017-09-05T16:31:17+09:00
+[INFO] Final Memory: 10M/123M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.codehaus.mojo:sql-maven-plugin:1.5:execute (default-cli)
+ on project atrs-initdb: 接続試行は失敗しました。: UTF-8シーケンス違反: 初期バイトは、10xxx
+xxx: 131 -> [Help 1]
+[ERROR]
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR]
+[ERROR] For more information about the errors and possible solutions, please read the follo
+wing articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
+
+
+
+原因
+pom.xmlの設定
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>jp.co.ntt.atrs</groupId>
+    <artifactId>atrs-parent</artifactId>
+    <version>1.1.0.RELEASE</version>
+    <relativePath>../atrs-parent/pom.xml</relativePath>
+  </parent>
+
+  <artifactId>atrs-initdb</artifactId>
+  <name>${project.artifactId}</name>
+
+  <profiles>
+    <profile>
+      <id>local-postgres</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <db.encoding>UTF8</db.encoding>
+        <db.basedir>src/sqls/postgres</db.basedir>
+        <db.url>jdbc:postgresql://127.0.0.1:5432/atrs</db.url>
+        <db.username>postgres</db.username>
+        <db.password>postgres</db.password>
+        <db.driver>org.postgresql.Driver</db.driver>
+        <db.groupId>org.postgresql</db.groupId>
+        <db.artifactId>postgresql</db.artifactId>
+        <db.version>${postgresql.version}</db.version>
+        <db.delimiterType>row</db.delimiterType>
+      </properties>
+    </profile>
+  </profiles>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>sql-maven-plugin</artifactId>
+        <version>1.5</version>
+        <dependencies>
+          <dependency>
+            <groupId>${db.groupId}</groupId>
+            <artifactId>${db.artifactId}</artifactId>
+            <version>${db.version}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <driver>${db.driver}</driver>
+          <url>${db.url}</url>
+          <username>${db.username}</username>
+          <password>${db.password}</password>
+          <encoding>${db.encoding}</encoding>
+          <autocommit>false</autocommit>
+          <delimiterType>${db.delimiterType}</delimiterType>
+          <onError>continue</onError>
+          <skip>false</skip>
+          <fileset>
+            <basedir>${db.basedir}</basedir>
+            <includes>
+              <include>0*.sql</include>
+            </includes>
+          </fileset>
+          <orderFile>ascending</orderFile>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+
+
+
+解決策
+
+https://jar-download.com/explore-java-source-code-detail.php?file=./javaSource/org.postgresql/postgresql/9.4.1210/org/postgresql/translation/ja.po&key=b64db1974c5e26b32f8e01c2af2584b5
+
+
+http://nobeans.hatenablog.com/entry/20080421/1208755170
+
+UTF8⇒UTF-8に変更してみる
+
+$ mvn -f atrs-initdb/pom.xml sql:execute
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building atrs-initdb 1.1.0.RELEASE
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] --- sql-maven-plugin:1.5:execute (default-cli) @ atrs-initdb ---
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1.067 s
+[INFO] Finished at: 2017-09-05T17:01:38+09:00
+[INFO] Final Memory: 10M/155M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.codehaus.mojo:sql-maven-plugin:1.5:execute (default-cli)
+ on project atrs-initdb: Execution default-cli of goal org.codehaus.mojo:sql-maven-plugin:1
+.5:execute failed: basedir src\sqls\postgres does not exist -> [Help 1]
+[ERROR]
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR]
+[ERROR] For more information about the errors and possible solutions, please read the follo
+wing articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/PluginExecutionException
+
+
+
+UTF-8⇒UTF8に戻す
+$ mvn -f atrs-initdb/pom.xml sql:execute
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building atrs-initdb 1.1.0.RELEASE
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] --- sql-maven-plugin:1.5:execute (default-cli) @ atrs-initdb ---
+[INFO] Executing file: C:\work\atrs\atrs-initdb\src\sqls\postgres\00000_drop_all_tables.sql
+
+[INFO] Executing file: C:\work\atrs\atrs-initdb\src\sqls\postgres\00100_create_all_tables.s
+ql
+[INFO] Executing file: C:\work\atrs\atrs-initdb\src\sqls\postgres\00200_insert_fixed_value.
+sql
+[INFO] Executing file: C:\work\atrs\atrs-initdb\src\sqls\postgres\00210_insert_route.sql
+[INFO] Executing file: C:\work\atrs\atrs-initdb\src\sqls\postgres\00220_insert_flight_maste
+r.sql
+[INFO] Executing file: C:\work\atrs\atrs-initdb\src\sqls\postgres\00230_insert_member.sql
+[INFO] Executing file: C:\work\atrs\atrs-initdb\src\sqls\postgres\00240_insert_peak_time.sq
+l
+[INFO] Executing file: C:\work\atrs\atrs-initdb\src\sqls\postgres\00250_insert_flight.sql
+[INFO] 8 of 8 SQL statements executed successfully
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 14.086 s
+[INFO] Finished at: 2017-09-05T17:02:21+09:00
+[INFO] Final Memory: 9M/155M
+[INFO] ------------------------------------------------------------------------
+
+
+
+
+-------------------------------------------------------
+使用環境
+mavenのpom.xmlの依存関係取得先をmavenからローカルリポジトリ(NEXUS管理)に変更した時のエラー
+
+状況
+社内プロキシ設定がされているsetings.xmlをNEXUSにアクセスできるように設定。
+
+今まで
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                     https://maven.apache.org/xsd/settings-1.0.0.xsd">
+ 
+
+ <proxies>
+   <proxy>
+     <id>myproxy</id>
+     <active>true</active>
+      <protocol>http</protocol>
+      <host>127.0.0.1</host>
+      <port>8080</port>
+      <username>U602896</username>
+      <password>6yhn5tgb</password>
+      <nonProxyHosts>*.google.com|ibiblio.org</nonProxyHosts>
+    </proxy>
+  </proxies>
+</settings>
+
+↓
+修正後
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                     https://maven.apache.org/xsd/settings-1.0.0.xsd">
+ 
+
+ <proxies>
+   <proxy>
+     <id>myproxy</id>
+     <active>true</active>
+      <protocol>http</protocol>
+      <host>127.0.0.1</host>
+      <port>8080</port>
+      <username>U602896</username>
+      <password>6yhn5tgb</password>
+      <nonProxyHosts>*.google.com|ibiblio.org</nonProxyHosts>
+    </proxy>
+  </proxies>
+</settings>
+
+<servers>
+    <server>
+        <id>nexus</id>
+        <username>btitouknzf</username>
+        <password>6yhn5tgb</password>
+    </server>
+</servers>
+
+<mirrors>
+    <mirror>        
+        <id>nexus</id>
+        <mirrorOf>*</mirrorOf>
+        <url>https://repo1.x-network.jp/nexus/repository/maven_public/</url>
+    </mirror>
+</mirrors>
+
+STSで対象のmavenプロジェクトを実行した。
+
+エラー内容
+jarファイルが取得できていない。それどころか、STSの動作が極端に重くなった。
+pom.xmlのdependencyで設定したjarが格納されるはずのディレクトリにはjarファイルは無く、
+terasoluna-security-validator-web-1.0.0.pom.lastUpdatedというファイルが存在していた。
+
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Mon Sep 04 15:03:32 JST 2017
+cd1ab7e1b294b0fdf3ccfebd1aca8ecb843d92cb@127.0.0.1\:8080>0fbad087be4a40bcae4645dabbf9387e30d44792@default-nexus-https\://repo1.x-network.jp/nexus/repository/maven_public/.lastUpdated=1504505012627
+https\://repo1.x-network.jp/nexus/repository/maven_public/.error=Could not transfer artifact jp.terasoluna.fw.lib\:terasoluna-security-validator-web\:pom\:1.0.0 from/to nexus (https\://repo1.x-network.jp/nexus/repository/maven_public/)\: Connection reset
+
+
+原因
+
+http://ponkotsusechan.hatenadiary.jp/entry/2016/02/01/173000
+Eclipseのプロキシ設定，mavenのsettings.xmlのどこかがいけてない可能性
+
+解決策
+
+ploxy設定とnexusにとりにいく際の設定が競合していた？
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                     https://maven.apache.org/xsd/settings-1.0.0.xsd">
+ 
+<servers>
+    <server>
+        <id>nexus</id>
+        <username>btitouknzf</username>
+        <password>6yhn5tgb</password>
+    </server>
+</servers>
+
+<mirrors>
+    <mirror>        
+        <id>nexus</id>
+        <mirrorOf>*</mirrorOf>
+        <url>https://repo1.x-network.jp/nexus/repository/maven_public/</url>
+    </mirror>
+</mirrors>
+
+これで、正常にとりにいけた。
+
+または、
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                     https://maven.apache.org/xsd/settings-1.0.0.xsd">
+ 
+
+ <proxies>
+   <proxy>
+     <id>myproxy</id>
+     <active>true</active>
+      <protocol>http</protocol>
+      <host>127.0.0.1</host>
+      <port>8080</port>
+      <username>U602896</username>
+      <password>6yhn5tgb</password>
+      <nonProxyHosts>*.google.com|ibiblio.org|*.x-network.jp</nonProxyHosts>
+      </proxy>
+  </proxies>
+</settings>
+
+<servers>
+    <server>
+        <id>nexus</id>
+        <username>btitouknzf</username>
+        <password>6yhn5tgb</password>
+    </server>
+</servers>
+
+<mirrors>
+    <mirror>        
+        <id>nexus</id>
+        <mirrorOf>*</mirrorOf>
+        <url>https://repo1.x-network.jp/nexus/repository/maven_public/</url>
+    </mirror>
+</mirrors>
+
+で、nexusのサーバにアクセスしに行くときはploxy設定を無効にすることができる。
+
+
+-------------------------------------------------------
+
+
