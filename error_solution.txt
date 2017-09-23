@@ -957,4 +957,32 @@ ploxy設定とnexusにとりにいく際の設定が競合していた？
 
 -------------------------------------------------------
 
+spring-test+Dbsetup spring-test+Dbunit+spring-test-Dbunit spring-test
+のリポジトリテスト実施方法の違い
 
+-------------------------------------------------------
+
+MockMVC
+二つのモード
+StandaloneSetupとwebAppContextSetupの違い
+
+configurationコンフィギュレーション
+設定・登録という意味？
+
+Spring徹底入門
+https://www.slideshare.net/KouheiToki/spring-66768974
+http://terasolunaorg.github.io/guideline/5.0.0.RELEASE/ja/ImplementationAtEachLayer/CreateWebApplicationProject.html#bean
+standalonesetup
+http://qiita.com/NetPenguin/items/0e06779ecdd48d24a5db
+webappcontextsetup
+http://kuwalab.hatenablog.jp/entry/20130402/p1
+
+https://myshittycode.com/2014/01/16/mockmvc-mockito-epic-tests/
+-------------------------------------------------------
+
+RestControllerとControllerの単体テストの方法の違い
+http://qiita.com/tag1216/items/3680b92cf96eb5a170f0
+http://qiita.com/NetPenguin/items/0e06779ecdd48d24a5db
+https://yo1000.gitbooks.io/self-study-spring/content/appendix1.html
+
+-------------------------------------------------------
