@@ -912,7 +912,7 @@ ploxy設定とnexusにとりにいく際の設定が競合していた？
         <url>https://repo1.x-network.jp/nexus/repository/maven_public/</url>
     </mirror>
 </mirrors>
-
+</settings>
 これで、正常にとりにいけた。
 
 または、
@@ -934,7 +934,7 @@ ploxy設定とnexusにとりにいく際の設定が競合していた？
       <nonProxyHosts>*.google.com|ibiblio.org|*.x-network.jp</nonProxyHosts>
       </proxy>
   </proxies>
-</settings>
+
 
 <servers>
     <server>
@@ -951,7 +951,7 @@ ploxy設定とnexusにとりにいく際の設定が競合していた？
         <url>https://repo1.x-network.jp/nexus/repository/maven_public/</url>
     </mirror>
 </mirrors>
-
+</servers>
 で、nexusのサーバにアクセスしに行くときはploxy設定を無効にすることができる。
 
 
