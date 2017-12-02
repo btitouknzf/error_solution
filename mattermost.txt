@@ -1,0 +1,45 @@
+mattermost 導入
+
+https://qiita.com/yaju/items/de94de6d8d8476d47454
+
+
+再起動したらやること
+0.XAMPPの立ち上げ
+XAMPP Control Panelをダブルクリック
+ApacheとMySQLのstartをクリック
+
+２mattermostの起動（システム自動起動がされていなかったら）
+cmd.exeを管理者から実行
+>cd C:\Mattermost\mattermost\bin
+>platform.exe
+
+
+mattermost アップデート
+
+http://zuntan02.hateblo.jp/entry/2017/04/05/123943
+
+
+
+/etc/init.d/mattermost stop
+/etc/init.d/mattermost status
+
+
+# 設定ファイル(config.json)の差し替え
+cd C:\Mattermost\mattermost_4.4.2\config
+mv config.json config.json_org
+cp -p C:\Mattermost\mattermost\config/config.json ./
+
+# ローカルストレージ(./data)のコピー
+cp -rp C:\Mattermost\mattermost\bin\data C:\Mattermost\mattermost_4.4.2\bin
+
+#ここいらないかも
+# 所有者変更
+#chown -R mattermost:mattermost /usr/local/src/mattermost/
+
+# アプリケーションディレクトリの新旧差し替え
+mv /opt/mattermost /opt/mattermost_old
+mv /usr/local/src/mattermost /opt/
+
+# 再開
+/etc/init.d/mattermost start
+/etc/init.d/mattermost status

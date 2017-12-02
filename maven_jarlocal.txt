@@ -1,0 +1,20 @@
+サードパーティ製のjarファイルがmavenのセントラルリポジトリから読み込んでくれないときの対処
+→ローカルにjarを落としてきてそれを強制的にmavenファイルとして読み込ませるコマンド
+
+mvn install:install-file ^
+    -Dfile=C:\db2jcc4.jar ^
+    -DgroupId=com.ibm.db2.jcc ^
+    -DartifactId=db2jcc4 ^
+    -Dversion=10.1 ^
+    -Dpackaging=jar ^
+    -DgeneratePom=true
+1:55 PM
+-Dfileのところは自ら落としてきたjarを適当なところに配置して、そこに変更
+
+
+
+STSにLombokを適用させる
+lombok.jarをダブルクリック
+C:\develop\sts-bundle\sts-3.9.1.RELEASE
+STS.iniを指定
+

@@ -1,0 +1,16 @@
+https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1013404290
+
+再起動後キーボードエラーが出た話
+
+サーバ用として立てたマシンなのでキーボード接続したくない
+
+FujitsuのPC
+
+F2でBIOS設定へ
+
+Aptio setup utility
+詳細→エラー停止→「全てのデバイス」
+
+「なし」に設定変更
+
+再起動
