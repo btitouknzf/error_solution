@@ -1,0 +1,39 @@
+12/4
+windows updateで更新エラーが起きた
+
+https://freesoft.tvbok.com/cat97/2017/2017_12_windows_update.html
+
+→管理者権限でコマンドプロンプトを起動して以下のコマンドを叩く。またはバッチファイルを叩く
+
+net stop wuauserv
+net stop cryptSvc
+net stop bits
+net stop msiserver
+ren %systemroot%\SoftwareDistribution SoftwareDistribution.old
+ren C:\Windows\System32\catroot2 catroot2.old
+del "%ALLUSERSPROFILE%\Microsoft\Network\Downloader\qmgr0.dat" 
+del "%ALLUSERSPROFILE%\Microsoft\Network\Downloader\qmgr1.dat"
+net start wuauserv
+net start cryptSvc
+net start bits
+net start msiserver
+
+その後windows update動作後、以下のコマンドを叩く。またはバッチファイルを叩く
+
+net stop wuauserv
+net stop cryptSvc
+net stop bits
+net stop msiserver
+rmdir c:\windows\softwaredistribution.old /q /s
+rmdir c:\Windows\System32\catroot2.old /q /s
+net start wuauserv
+net start cryptSvc
+net start bits
+net start msiserver
+
+最初のコマンドでバックアップしたファイルを削除するバッチ
+
+念のため再起動
+
+再度windows updateの更新確認
+
