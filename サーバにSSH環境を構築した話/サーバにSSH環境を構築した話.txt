@@ -1,0 +1,375 @@
+OPEN SSHを導入した話
+https://qiita.com/rubytomato@github/items/a7681c9ccb5db65025df
+http://min117.hatenablog.com/entry/2016/06/27/151941
+https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v1.0.0.0
+
+最新版にはinstall-sshlsa.ps1が存在しない
+
+githubには代わりに
+Powershell.exe -ExecutionPolicy Bypass -Command '. .\FixHostFilePermissions.ps1 -Confirm:$false'
+をつかえ的なことが書いてある
+cmdからそのまま打てなかったので直接powershellを管理者権限で実行して起動する
+
+Windows PowerShell
+Copyright (C) 2009 Microsoft Corporation. All rights reserved.
+
+PS C:\windows\system32> cd C:\OpenSSH
+PS C:\OpenSSH> .\FixHostFilePermissions.ps1 -Confirm:$false
+スクリプトの実行がシステムで無効になっているため、ファイル C:\OpenSSH\FixHostFilePermissions.ps1 を読み込めません。詳細
+については、「get-help about_signing」と入力してヘルプを参照してください。
+発生場所 行:1 文字:29
++ .\FixHostFilePermissions.ps1 <<<<  -Confirm:$false
+    + CategoryInfo          : NotSpecified: (:) []、PSSecurityException
+    + FullyQualifiedErrorId : RuntimeException
+
+PS C:\OpenSSH>
+
+Execution_Policiesをオンにする必要がある？
+あーだから上のcmdコマンドなのか
+
+https://qiita.com/ww24/items/7d52df13fef5bc54e149
+によるとcmdからpowershell起動時はダブルクオートらしいので修正
+Powershell.exe -ExecutionPolicy Bypass -Command ".\FixHostFilePermissions.ps1 -Confirm:$false"
+
+無事起動
+
+
+ssh-keygen.exe -l -f ssh_host_rsa_key -E md5
+→使えない
+gitによると
+C:\ProgramData\sshに移動されたらしい
+
+ディレクトリ移動して実行
+できねぇｗ
+もどって絶対指定でファイルを指定する
+C:\ProgramData\ssh>cd C:\OpenSSH
+
+C:\OpenSSH>ssh-keygen.exe -l -f C:\ProgramData\ssh\ssh_host_rsa_key -E md5
+2048 MD5:66:dd:ed:71:ed:5e:53:2d:de:82:07:df:5e:46:be:56 jiki-admin@jiki-admin-pc@Jiki-Admin-PC (RSA)
+
+できた
+
+再起動後・・・
+
+net start sshd
+システム エラー 1067 が発生しました。
+http://m-style-beta.ddo.jp/-bibouroku/305d306e4ed6/windows-for-openssh30a430f330b930c830fc30eb
+
+「システム エラー 1067 が発生しました。」とのメッセージが出るときは
+host keyをすべて、sshd.exeがあるフォルダに移動すればいけるはず・・・だけどなんか違う気がする
+
+setup-ssh-lsa.cmdでセットアップコマンドをたたく必要がある・・・？けどそんなのない
+ので、
+install-sshd.ps1をたたいてみる
+
+Powershell.exe -ExecutionPolicy Bypass -Command ".\install-sshd.ps1"
+やってることはレジストリへの登録みたいだったのでやる必要はなかったくさい
+
+
+C:\OpenSSH>sshd install
+sshd re-exec requires execution with an absolute path
+
+C:\OpenSSH>C:\OpenSSH\sshd install
+Extra argument install.
+
+C:\OpenSSH>
+
+起動できねぇ！どうやらベータ版で全然中身が変わってしまったやつを実行してしまったらしい
+v1.0.0.0-Beta
+
+Powershell.exe -ExecutionPolicy Bypass -Command "uninstall-sshd.ps1"
+
+v0.0.24.0のものを持ってきて実行する（以下★に移動
+
+v1.0.0.0-Beta
+作業ログ
+=========================================================================================
+Microsoft Windows [Version 6.1.7601]
+Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+C:\windows\system32>netsh advfirewall firewall add rule name="sshd" dir=in action=allow protocol=TCP localport=22 profile=private
+OK
+
+
+C:\windows\system32>netsh advfirewall firewall show rule name="sshd"
+
+規則名:                               sshd
+----------------------------------------------------------------------
+有効:                                 はい
+方向:                                 入力
+プロファイル:                         プライベート
+グループ:
+ローカル IP:                          任意
+リモート IP:                          任意
+プロトコル:                           TCP
+ローカル ポート:                      22
+リモート ポート:                      任意
+エッジ トラバーサル:                  いいえ
+操作:                                 許可
+OK
+
+
+C:\windows\system32>cd C:\OpenSSH
+
+C:\OpenSSH>powershell.exe -ExecutionPolicy Bypass -File install-sshd.ps1
+[SC] SetServiceObjectSecurity SUCCESS
+sshd and ssh-agent services successfully installed
+
+C:\OpenSSH>ssh-keygen.exe -A
+ssh-keygen.exe: generating new host keys: RSA DSA ECDSA ED25519
+
+C:\OpenSSH>powershell.exe -ExecutionPolicy Bypass -File install-sshlsa.ps1
+-File パラメーターの引数 'install-sshlsa.ps1' は存在しません。既存の '.ps1' ファイルのパスを -File パラメーターの引数として指定してください。
+
+C:\OpenSSH>powershell.exe -ExecutionPolicy Bypass -File install-sshd.ps1
+[SC] DeleteService SUCCESS
+[SC] DeleteService SUCCESS
+[SC] SetServiceObjectSecurity SUCCESS
+sshd and ssh-agent services successfully installed
+
+C:\OpenSSH>Powershell.exe -ExecutionPolicy Bypass -Command '. .\FixHostFilePermissions.ps1 -Confirm:$false'
+. .\FixHostFilePermissions.ps1 -Confirm:$false
+
+C:\OpenSSH>Powershell.exe -ExecutionPolicy Bypass -Command 'FixHostFilePermissions.ps1 -Confirm:$false'
+FixHostFilePermissions.ps1 -Confirm:$false
+
+C:\OpenSSH>Powershell.exe -ExecutionPolicy Bypass -Command '.\FixHostFilePermissions.ps1 -Confirm:$false'
+.\FixHostFilePermissions.ps1 -Confirm:$false
+
+C:\OpenSSH>Powershell.exe -ExecutionPolicy Bypass -Command ".\FixHostFilePermissions.ps1 -Confirm:$false"
+  [*] C:\ProgramData\ssh\sshd_config
+Inheritance is removed from 'C:\ProgramData\ssh\sshd_config'.
+'NT AUTHORITY\Authenticated Users' has no more access to 'C:\ProgramData\ssh\sshd_config'.
+      Repaired permissions
+
+  [*] C:\ProgramData\ssh\ssh_host_dsa_key
+'Jiki-Admin-PC\Jiki-Admin' has no more access to 'C:\ProgramData\ssh\ssh_host_dsa_key'.
+      Repaired permissions
+
+  [*] C:\ProgramData\ssh\ssh_host_dsa_key.pub
+'Jiki-Admin-PC\Jiki-Admin' now has Read access to 'C:\ProgramData\ssh\ssh_host_dsa_key.pub'.
+      Repaired permissions
+
+  [*] C:\ProgramData\ssh\ssh_host_ecdsa_key
+'Jiki-Admin-PC\Jiki-Admin' has no more access to 'C:\ProgramData\ssh\ssh_host_ecdsa_key'.
+      Repaired permissions
+
+  [*] C:\ProgramData\ssh\ssh_host_ecdsa_key.pub
+'Jiki-Admin-PC\Jiki-Admin' now has Read access to 'C:\ProgramData\ssh\ssh_host_ecdsa_key.pub'.
+      Repaired permissions
+
+  [*] C:\ProgramData\ssh\ssh_host_ed25519_key
+'Jiki-Admin-PC\Jiki-Admin' has no more access to 'C:\ProgramData\ssh\ssh_host_ed25519_key'.
+      Repaired permissions
+
+  [*] C:\ProgramData\ssh\ssh_host_ed25519_key.pub
+'Jiki-Admin-PC\Jiki-Admin' now has Read access to 'C:\ProgramData\ssh\ssh_host_ed25519_key.pub'.
+      Repaired permissions
+
+  [*] C:\ProgramData\ssh\ssh_host_rsa_key
+'Jiki-Admin-PC\Jiki-Admin' has no more access to 'C:\ProgramData\ssh\ssh_host_rsa_key'.
+      Repaired permissions
+
+  [*] C:\ProgramData\ssh\ssh_host_rsa_key.pub
+'Jiki-Admin-PC\Jiki-Admin' now has Read access to 'C:\ProgramData\ssh\ssh_host_rsa_key.pub'.
+      Repaired permissions
+
+   Done.
+
+
+C:\OpenSSH>ssh-keygen.exe -l -f ssh_host_rsa_key -E md5
+ssh-keygen.exe: ssh_host_rsa_key: No such file or directory
+
+C:\OpenSSH>cd C:\ProgramData\ssh
+
+C:\ProgramData\ssh>ssh-keygen.exe -l -f ssh_host_rsa_key -E md5
+'ssh-keygen.exe' は、内部コマンドまたは外部コマンド、
+操作可能なプログラムまたはバッチ ファイルとして認識されていません。
+
+C:\ProgramData\ssh>cd C:\OpenSSH
+
+C:\OpenSSH>ssh-keygen.exe -l -f C:\ProgramData\ssh\ssh_host_rsa_key -E md5
+2048 MD5:66:dd:ed:71:ed:5e:53:2d:de:82:07:df:5e:46:be:56 jiki-admin@jiki-admin-pc@Jiki-Admin-PC (RSA)
+
+C:\OpenSSH>
+
+=========================================================================================
+
+v1.0.0.0-Beta
+再起動後
+=========================================================================================
+
+Microsoft Windows [Version 6.1.7601]
+Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+C:\windows\system32>net start sshd
+sshd サービスを開始します..
+sshd サービスを開始できませんでした。
+
+システム エラーが発生しました。
+
+システム エラー 1067 が発生しました。
+
+プロセスを途中で強制終了しました。
+
+
+C:\windows\system32>
+
+
+=========================================================================================
+
+
+
+
+★
+v0.0.24.0
+=========================================================================================
+
+https://teratail.com/questions/43367
+cygwinが６４ビット版だと必要らしい
+おとなしく３２ビットに変更
+
+Microsoft Windows [Version 6.1.7601]
+Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+C:\windows\system32>cd C:\OpenSSH
+
+C:\OpenSSH>.\ssh-keygen.exe -A
+.\ssh-keygen.exe: generating new host keys: RSA DSA ECDSA ED25519
+
+C:\OpenSSH>Powershell.exe -ExecutionPolicy Bypass -Command ".\install-sshd.ps1"
+[SC] SetServiceObjectSecurity SUCCESS
+[SC] ChangeServiceConfig SUCCESS
+[SC] ChangeServiceConfig2 SUCCESS
+sshd and ssh-agent services successfully installed
+
+C:\OpenSSH>sshd install
+Extra argument install.
+
+C:\OpenSSH>sshd uninstall
+Extra argument uninstall.
+
+C:\OpenSSH>Powershell.exe -ExecutionPolicy Bypass -Command "uninstall-sshd.ps1"
+[SC] DeleteService SUCCESS
+sshd successfully uninstalled
+[SC] DeleteService SUCCESS
+ssh-agent successfully uninstalled
+
+C:\OpenSSH>
+=========================================================================================
+
+
+
+32ビット版
+
+
+Microsoft Windows [Version 6.1.7601]
+Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+C:\windows\system32>cd C:\OpenSSH
+
+C:\OpenSSH>.\ssh-keygen.exe -A
+.\ssh-keygen.exe: generating new host keys: RSA DSA ECDSA ED25519
+
+C:\OpenSSH>Powershell.exe -ExecutionPolicy Bypass -Command ".\install-sshd.ps1"
+[SC] SetServiceObjectSecurity SUCCESS
+[SC] ChangeServiceConfig SUCCESS
+[SC] ChangeServiceConfig2 SUCCESS
+sshd and ssh-agent services successfully installed
+
+C:\OpenSSH>.\sshd.exe install
+./sshd_config line 117: Subsystem 'sftp' already defined.
+
+C:\OpenSSH>
+
+
+5_30_2016
+http://s.webry.info/sp/vogel.at.webry.info/201610/article_12.html
+OpenSSH-Win32.zip
+
+
+
+
+Microsoft Windows [Version 6.1.7601]
+Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+C:\windows\system32>cd C:\OpenSSH
+
+C:\OpenSSH>powershell.exe -ExecutionPolicy Bypass -File install-sshd.ps1
+[SC] DeleteService SUCCESS
+[SC] DeleteService SUCCESS
+[SC] SetServiceObjectSecurity SUCCESS
+[SC] ChangeServiceConfig SUCCESS
+ Granting SeAssignPrimaryTokenPrivilege to NT SERVICE\SSHD   ... successful
+sshd and ssh-agent services successfully installed
+
+C:\OpenSSH> ssh-keygen.exe -A
+ssh-keygen.exe: generating new host keys: RSA DSA ECDSA ED25519
+
+C:\OpenSSH> powershell.exe -ExecutionPolicy Bypass -File install-sshlsa.ps1
+[Microsoft.Win32.RegistryKey] に 'OpenBaseKey' という名前のメソッドが含まれないため、メソッドの呼び出しに失敗しました。
+発生場所 C:\OpenSSH\install-sshlsa.ps1:4 文字:50
++ $reg = [Microsoft.Win32.RegistryKey]::OpenBaseKey <<<< ('LocalMachine', 0)
+    + CategoryInfo          : InvalidOperation: (OpenBaseKey:String) []、RuntimeException
+    + FullyQualifiedErrorId : MethodNotFound
+
+null 値の式ではメソッドを呼び出せません。
+発生場所 C:\OpenSSH\install-sshlsa.ps1:5 文字:23
++ $key = $reg.OpenSubKey <<<< ($subkey, $true)
+    + CategoryInfo          : InvalidOperation: (OpenSubKey:String) []、RuntimeException
+    + FullyQualifiedErrorId : InvokeMethodOnNull
+
+null 値の式ではメソッドを呼び出せません。
+発生場所 C:\OpenSSH\install-sshlsa.ps1:6 文字:21
++ $arr = $key.GetValue <<<< ($value)
+    + CategoryInfo          : InvalidOperation: (GetValue:String) []、RuntimeException
+    + FullyQualifiedErrorId : InvokeMethodOnNull
+
+null 値の式ではメソッドを呼び出せません。
+発生場所 C:\OpenSSH\install-sshlsa.ps1:9 文字:16
+
+
++   $key.SetValue <<<< ($value, [string[]]$arr, 'MultiString')
+    + CategoryInfo          : InvalidOperation: (SetValue:String) []、RuntimeException
+    + FullyQualifiedErrorId : InvokeMethodOnNull
+
+############
+
+Windows10の場合
+
+powershell -executionpolicy bypass -file install-sshlsa.ps1
+
+
+
+Windows7の場合
+
+reg add HKLM\System\CurrentControlSet\Control\Lsa /v "Authentication Packages" /t REG_MULTI_SZ /d msv1_0\0ssh-lsa.dll -f
+
+copy .\ssh-lsa.dll %SystemRoot%\system32\
+
+##########
+C:\OpenSSH>
+C:\OpenSSH>reg add HKLM\System\CurrentControlSet\Control\Lsa /v "Authentication Packages" /t REG_MULTI_SZ /d msv1_0\0ssh-lsa.dll -f
+この操作を正しく終了しました。
+
+C:\OpenSSH>
+C:\OpenSSH>copy .\ssh-lsa.dll %SystemRoot%\system32\
+C:\windows\system32\ssh-lsa.dll を上書きしますか? (Yes/No/All): y
+        1 個のファイルをコピーしました。
+
+C:\OpenSSH>ssh-keygen.exe -l -f ssh_host_rsa_key -E md5
+2048 MD5:c9:52:32:1f:44:9c:4d:f6:06:af:ee:24:be:cf:56:ce Jiki-Admin@Jiki-Admin-PC (RSA)
+
+C:\OpenSSH>powershell -Command "Set-Service sshd -StartupType Automatic"
+
+C:\OpenSSH>
+C:\OpenSSH>powershell -Command "Set-Service ssh-agent -StartupType Automatic"
+
+C:\OpenSSH>netsh advfirewall firewall add rule name="SSH Port" dir=in action=allow protocol=TCP localport=22
+OK
+
+
+
+
+
+C:\OpenSSH>netstat -nao
