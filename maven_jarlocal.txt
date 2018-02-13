@@ -18,3 +18,113 @@ lombok.jarをダブルクリック
 C:\develop\sts-bundle\sts-3.9.1.RELEASE
 STS.iniを指定
 
+---------------------------------------------------------------------
+
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/C:/brainsellers/biz-StreamV5.0.0/bs/bs-5.0.0/bs-5.0.0/logback-classic.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/C:/NEXUS/repository/ch/qos/logback/logback-classic/1.1.8/logback-classic-1.1.8.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+17:55:49,784 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+17:55:49,784 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.groovy]
+17:55:49,784 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/C:/gitbucket/IB2020_group/TERA5x_batch/shinkin-batch/target/classes/logback.xml]
+17:55:49,784 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs multiple times on the classpath.
+17:55:49,800 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs at [file:/C:/brainsellers/biz-StreamV5.0.0/bs/bs-5.0.0/bs-5.0.0/logback.xml]
+17:55:49,800 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs at [file:/C:/gitbucket/IB2020_group/TERA5x_batch/shinkin-batch/target/classes/logback.xml]
+17:55:50,127 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
+17:55:50,127 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+17:55:50,143 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [consoleLog]
+17:55:50,159 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+17:55:50,346 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.rolling.RollingFileAppender]
+17:55:50,361 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [APPLICATION_LOG_FILE]
+17:55:50,393 |-INFO in c.q.l.core.rolling.TimeBasedRollingPolicy@9159637 - No compression will be used
+17:55:50,393 |-INFO in c.q.l.core.rolling.TimeBasedRollingPolicy@9159637 - Will use the pattern log/shinkin-batch-application-%d{yyyyMMddHH}.log for the active file
+17:55:50,408 |-INFO in c.q.l.core.rolling.DefaultTimeBasedFileNamingAndTriggeringPolicy - The date pattern is 'yyyyMMddHH' from file name pattern 'log/shinkin-batch-application-%d{yyyyMMddHH}.log'.
+17:55:50,408 |-INFO in c.q.l.core.rolling.DefaultTimeBasedFileNamingAndTriggeringPolicy - Roll-over at the top of every hour.
+17:55:50,408 |-INFO in c.q.l.core.rolling.DefaultTimeBasedFileNamingAndTriggeringPolicy - Setting initial period to Tue Feb 06 17:55:50 JST 2018
+17:55:50,424 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+17:55:50,424 |-INFO in ch.qos.logback.core.rolling.RollingFileAppender[APPLICATION_LOG_FILE] - Active log file name: log/shinkin-batch-application.log
+17:55:50,424 |-INFO in ch.qos.logback.core.rolling.RollingFileAppender[APPLICATION_LOG_FILE] - File property is set to [log/shinkin-batch-application.log]
+17:55:50,424 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.rolling.RollingFileAppender]
+17:55:50,424 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [MONITORING_LOG_FILE]
+17:55:50,424 |-INFO in c.q.l.core.rolling.TimeBasedRollingPolicy@14291029 - No compression will be used
+17:55:50,424 |-INFO in c.q.l.core.rolling.TimeBasedRollingPolicy@14291029 - Will use the pattern log/shinkin-batch-monitoring-%d{yyyyMMdd}.log for the active file
+17:55:50,424 |-INFO in c.q.l.core.rolling.DefaultTimeBasedFileNamingAndTriggeringPolicy - The date pattern is 'yyyyMMdd' from file name pattern 'log/shinkin-batch-monitoring-%d{yyyyMMdd}.log'.
+17:55:50,424 |-INFO in c.q.l.core.rolling.DefaultTimeBasedFileNamingAndTriggeringPolicy - Roll-over at midnight.
+17:55:50,424 |-INFO in c.q.l.core.rolling.DefaultTimeBasedFileNamingAndTriggeringPolicy - Setting initial period to Tue Feb 06 17:55:50 JST 2018
+17:55:50,424 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+17:55:50,424 |-INFO in ch.qos.logback.core.rolling.RollingFileAppender[MONITORING_LOG_FILE] - Active log file name: log/shinkin-batch-monitoring.log
+17:55:50,424 |-INFO in ch.qos.logback.core.rolling.RollingFileAppender[MONITORING_LOG_FILE] - File property is set to [log/shinkin-batch-monitoring.log]
+17:55:50,455 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [jp.co.nttdata.shinkin] to false
+17:55:50,455 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - jp.co.nttdata.shinkin level set to WARN
+17:55:50,455 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [MONITORING_LOG_FILE] to Logger[jp.co.nttdata.shinkin]
+17:55:50,455 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [jp.co.nttdata.shinkin] to false
+17:55:50,455 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - jp.co.nttdata.shinkin level set to INFO
+17:55:50,455 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [APPLICATION_LOG_FILE] to Logger[jp.co.nttdata.shinkin]
+17:55:50,455 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [jp.co.nttdata.shinkin] to false
+17:55:50,455 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - jp.co.nttdata.shinkin level set to INFO
+17:55:50,455 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [consoleLog] to Logger[jp.co.nttdata.shinkin]
+17:55:50,455 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [org.terasoluna.batch.async.db.repository] to false
+17:55:50,455 |-INFO in ch.qos.logback.classic.joran.action.LevelAction - org.terasoluna.batch.async.db.repository level set to DEBUG
+17:55:50,455 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [consoleLog] to Logger[org.terasoluna.batch.async.db.repository]
+17:55:50,455 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to INFO
+17:55:50,455 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [consoleLog] to Logger[ROOT]
+17:55:50,455 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [APPLICATION_LOG_FILE] to Logger[ROOT]
+17:55:50,455 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
+17:55:50,455 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5d012c - Registering current configuration as safe fallback point
+SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]
+
+[2018/02/06 17:55:50] [main] [o.s.c.s.ClassPathXmlApplicationContext] [INFO ] Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@100a15d: startup date [Tue Feb 06 17:55:50 JST 2018]; root of context hierarchy
+[2018/02/06 17:55:51] [main] [o.s.b.f.x.XmlBeanDefinitionReader] [INFO ] Loading XML bean definitions from class path resource [META-INF/jobs/sample03/sample03.xml]
+[2018/02/06 17:55:51] [main] [o.s.b.f.x.XmlBeanDefinitionReader] [INFO ] Loading XML bean definitions from class path resource [META-INF/spring/job-base-context.xml]
+[2018/02/06 17:55:51] [main] [o.s.b.f.x.XmlBeanDefinitionReader] [INFO ] Loading XML bean definitions from class path resource [META-INF/spring/launch-context.xml]
+[2018/02/06 17:55:53] [main] [o.s.b.f.c.PropertyPlaceholderConfigurer] [INFO ] Loading properties file from class path resource [batch-application.properties]
+[2018/02/06 17:55:53] [main] [o.s.b.f.c.PropertyPlaceholderConfigurer] [INFO ] Loading properties file from class path resource [META-INF/jobs/sample03/sample03.properties]
+[2018/02/06 17:55:53] [main] [o.s.b.f.s.DefaultListableBeanFactory] [INFO ] Overriding bean definition for bean 'sample01JobTasklet' with a different definition: replacing [Generic bean: class [jp.co.nttdata.shinkin.batch.sample01.Sample01JobTasklet]; scope=step; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=false; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample01\Sample01JobTasklet.class]] with [Root bean: class [org.springframework.aop.scope.ScopedProxyFactoryBean]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in BeanDefinition defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample01\Sample01JobTasklet.class]]
+[2018/02/06 17:55:53] [main] [o.s.b.f.s.DefaultListableBeanFactory] [INFO ] Overriding bean definition for bean 'sample02JobTasklet' with a different definition: replacing [Generic bean: class [jp.co.nttdata.shinkin.batch.sample02.Sample02JobTasklet]; scope=step; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=false; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample02\Sample02JobTasklet.class]] with [Root bean: class [org.springframework.aop.scope.ScopedProxyFactoryBean]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in BeanDefinition defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample02\Sample02JobTasklet.class]]
+[2018/02/06 17:55:53] [main] [o.s.b.f.s.DefaultListableBeanFactory] [INFO ] Overriding bean definition for bean 'sample03JobTasklet' with a different definition: replacing [Generic bean: class [jp.co.nttdata.shinkin.batch.sample03.Sample03JobTasklet]; scope=step; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=false; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample03\Sample03JobTasklet.class]] with [Root bean: class [org.springframework.aop.scope.ScopedProxyFactoryBean]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in BeanDefinition defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample03\Sample03JobTasklet.class]]
+[2018/02/06 17:55:53] [main] [o.s.b.f.s.DefaultListableBeanFactory] [INFO ] Overriding bean definition for bean 'sample04JobTasklet' with a different definition: replacing [Generic bean: class [jp.co.nttdata.shinkin.batch.sample04.Sample04JobTasklet]; scope=step; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=false; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample04\Sample04JobTasklet.class]] with [Root bean: class [org.springframework.aop.scope.ScopedProxyFactoryBean]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in BeanDefinition defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample04\Sample04JobTasklet.class]]
+[2018/02/06 17:55:53] [main] [o.s.b.f.a.AutowiredAnnotationBeanPostProcessor] [INFO ] JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+[2018/02/06 17:55:53] [main] [o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker] [INFO ] Bean 'jobRegistry' of type [class org.springframework.batch.core.configuration.support.MapJobRegistry] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[2018/02/06 17:55:53] [main] [o.s.c.s.ClassPathXmlApplicationContext] [WARN ] Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'jobRepository': Invocation of init method failed; nested exception is org.springframework.jdbc.support.MetaDataAccessException: Could not get Connection for extracting meta data; nested exception is org.springframework.jdbc.CannotGetJdbcConnectionException: Could not get JDBC Connection; nested exception is java.sql.SQLException: Cannot load JDBC driver class 'com.ibm.db2.jcc.DB2Driver'
+[2018/02/06 17:55:53] [main] [o.s.b.c.l.s.CommandLineJobRunner] [ERROR] Job Terminated in error: Error creating bean with name 'jobRepository': Invocation of init method failed; nested exception is org.springframework.jdbc.support.MetaDataAccessException: Could not get Connection for extracting meta data; nested exception is org.springframework.jdbc.CannotGetJdbcConnectionException: Could not get JDBC Connection; nested exception is java.sql.SQLException: Cannot load JDBC driver class 'com.ibm.db2.jcc.DB2Driver'
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'jobRepository': Invocation of init method failed; nested exception is org.springframework.jdbc.support.MetaDataAccessException: Could not get Connection for extracting meta data; nested exception is org.springframework.jdbc.CannotGetJdbcConnectionException: Could not get JDBC Connection; nested exception is java.sql.SQLException: Cannot load JDBC driver class 'com.ibm.db2.jcc.DB2Driver'
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1589)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:554)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:740)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:866)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:542)
+	at org.springframework.context.support.ClassPathXmlApplicationContext.<init>(ClassPathXmlApplicationContext.java:139)
+	at org.springframework.context.support.ClassPathXmlApplicationContext.<init>(ClassPathXmlApplicationContext.java:83)
+	at org.springframework.batch.core.launch.support.CommandLineJobRunner.start(CommandLineJobRunner.java:290)
+	at org.springframework.batch.core.launch.support.CommandLineJobRunner.main(CommandLineJobRunner.java:592)
+Caused by: org.springframework.jdbc.support.MetaDataAccessException: Could not get Connection for extracting meta data; nested exception is org.springframework.jdbc.CannotGetJdbcConnectionException: Could not get JDBC Connection; nested exception is java.sql.SQLException: Cannot load JDBC driver class 'com.ibm.db2.jcc.DB2Driver'
+	at org.springframework.jdbc.support.JdbcUtils.extractDatabaseMetaData(JdbcUtils.java:339)
+	at org.springframework.jdbc.support.JdbcUtils.extractDatabaseMetaData(JdbcUtils.java:366)
+	at org.springframework.batch.support.DatabaseType.fromMetaData(DatabaseType.java:97)
+	at org.springframework.batch.core.repository.support.JobRepositoryFactoryBean.afterPropertiesSet(JobRepositoryFactoryBean.java:182)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1648)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1585)
+	... 13 common frames omitted
+Caused by: org.springframework.jdbc.CannotGetJdbcConnectionException: Could not get JDBC Connection; nested exception is java.sql.SQLException: Cannot load JDBC driver class 'com.ibm.db2.jcc.DB2Driver'
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:80)
+	at org.springframework.jdbc.support.JdbcUtils.extractDatabaseMetaData(JdbcUtils.java:326)
+	... 18 common frames omitted
+Caused by: java.sql.SQLException: Cannot load JDBC driver class 'com.ibm.db2.jcc.DB2Driver'
+	at org.apache.commons.dbcp2.BasicDataSource.createConnectionFactory(BasicDataSource.java:2139)
+	at org.apache.commons.dbcp2.BasicDataSource.createDataSource(BasicDataSource.java:2033)
+	at org.apache.commons.dbcp2.BasicDataSource.getConnection(BasicDataSource.java:1533)
+	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:111)
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:77)
+	... 19 common frames omitted
+Caused by: java.lang.ClassNotFoundException: com.ibm.db2.jcc.DB2Driver
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at org.apache.commons.dbcp2.BasicDataSource.createConnectionFactory(BasicDataSource.java:2131)
+	... 23 common frames omitted

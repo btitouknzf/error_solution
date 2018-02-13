@@ -1418,3 +1418,1172 @@ https://www.mkyong.com/spring-batch/nosuchbeandefinitionexception-no-qualifying-
 pandocのインストール先
 変わってるっぽい？
 C:\Program Files\Pandoc
+
+
+
+-------------------------------------------------------
+状況
+STS(eclipse)にてmavenのビルドからjarファイルを作成しようとしたらエラー
+
+maven ビルドにて
+ゴールにclean dependency:copy-dependencies -DoutputDirectory=lib packageを指定
+↑こうすることでアプリのjar以外に、依存するjarファイルも一式作成される
+
+エラー内容
+
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building TERASOLUNA Batch Framework for Java (5.x) Blank Project 1.0.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[WARNING] The POM for jp.co.nttdata.shinkin.batch:MultiStructure-child1:jar:1.0-SNAPSHOT is missing, no dependency information available
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 0.966 s
+[INFO] Finished at: 2018-01-23T11:35:18+09:00
+[INFO] Final Memory: 8M/20M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal on project shinkin-batch: Could not resolve dependencies for project jp.co.nttdata.shinkin.batch:shinkin-batch:jar:1.0.0-SNAPSHOT: Failure to find jp.co.nttdata.shinkin.batch:MultiStructure-child1:jar:1.0-SNAPSHOT in http://repo.terasoluna.org/nexus/content/repositories/terasoluna-batch-snapshots/ was cached in the local repository, resolution will not be reattempted until the update interval of terasoluna-batch-snapshots has elapsed or updates are forced -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException
+
+
+原因
+mavenでブランクプロジェクトを作成した時のプロジェクト名を後から変更した。
+その後ビルドしようとしたときに、元のプロジェクト名の状態が残っていたため？
+maven のアーキタイプ
+というかpom.xmlを直していなかった。（マルチプロジェクト構成にしていたため親子関係をpom.xmlに記載
+リファクタリングでさすがにそこまでは直してくれなかった・・・
+
+
+解決策
+http://ponkotsusechan.hatenadiary.jp/entry/2016/02/01/173000
+もあったけど違った
+各親と子のpom.xmlの変更したプロジェクト名の箇所を変更
+
+新たな問題発生
+
+[INFO] Scanning for projects...
+[ERROR] [ERROR] Some problems were encountered while processing the POMs:
+[ERROR] Child module C:\gitbucket\IB2020_group\MultiStructure\MultiStructure-parent\TERA5x_batch-env of C:\gitbucket\IB2020_group\MultiStructure\MultiStructure-parent\pom.xml does not exist @ 
+[ERROR] Child module C:\gitbucket\IB2020_group\MultiStructure\MultiStructure-parent\TERA5x_batch-app of C:\gitbucket\IB2020_group\MultiStructure\MultiStructure-parent\pom.xml does not exist @ 
+ @ 
+[ERROR] The build could not read 1 project -> [Help 1]
+[ERROR]   
+[ERROR]   The project jp.co.nttdata.shinkin.batch:TERA5x_batch:1.0-SNAPSHOT (C:\gitbucket\IB2020_group\MultiStructure\MultiStructure-parent\pom.xml) has 2 errors
+[ERROR]     Child module C:\gitbucket\IB2020_group\MultiStructure\MultiStructure-parent\TERA5x_batch-env of C:\gitbucket\IB2020_group\MultiStructure\MultiStructure-parent\pom.xml does not exist
+[ERROR]     Child module C:\gitbucket\IB2020_group\MultiStructure\MultiStructure-parent\TERA5x_batch-app of C:\gitbucket\IB2020_group\MultiStructure\MultiStructure-parent\pom.xml does not exist
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/ProjectBuildingException
+
+フォルダ名も変えてなかった。
+.m2のリポジトリ内の対象フォルダを消して再度実行
+
+
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building TERASOLUNA Batch Framework for Java (5.x) Blank Project 1.0.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[WARNING] The POM for jp.co.nttdata.shinkin.batch:TERA5x_batch-env:jar:1.0-SNAPSHOT is missing, no dependency information available
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1.170 s
+[INFO] Finished at: 2018-01-23T13:57:00+09:00
+[INFO] Final Memory: 8M/20M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal on project TERA5x_batch-app: Could not resolve dependencies for project jp.co.nttdata.shinkin.batch:TERA5x_batch-app:jar:1.0.0-SNAPSHOT: Failure to find jp.co.nttdata.shinkin.batch:TERA5x_batch-env:jar:1.0-SNAPSHOT in http://repo.terasoluna.org/nexus/content/repositories/terasoluna-batch-snapshots/ was cached in the local repository, resolution will not be reattempted until the update interval of terasoluna-batch-snapshots has elapsed or updates are forced -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException
+
+.m2のリポジトリ内の対象フォルダを消して再度実行
+
+m2リポジトリ上に存在しないものをdependencyしていた。つまり子のjar。
+dependencyからはずす
+
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building TERASOLUNA Batch Framework for Java (5.x) Blank Project 1.0.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ TERA5x_batch-app ---
+[INFO] Deleting C:\gitbucket\IB2020_group\MultiStructure\TERA5x_batch\TERA5x_batch-app\target
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:copy-dependencies (default-cli) @ TERA5x_batch-app ---
+[INFO] Copying junit-3.8.1.jar to C:\gitbucket\IB2020_group\MultiStructure\TERA5x_batch\TERA5x_batch-app\lib\junit-3.8.1.jar
+[INFO] Copying terasoluna-batch-5.0.0.RELEASE.jar to C:\gitbucket\IB2020_group\MultiStructure\TERA5x_batch\TERA5x_batch-app\lib\terasoluna-batch-5.0.0.RELEASE.jar
+[INFO] jettison-1.2.jar already exists in destination.
+[INFO] mybatis-typehandlers-jsr310-1.0.2.jar already exists in destination.
+[INFO] slf4j-api-1.7.22.jar already exists in destination.
+[INFO] logback-core-1.1.8.jar already exists in destination.
+[INFO] h2-1.4.193.jar already exists in destination.
+[INFO] spring-batch-core-3.0.7.RELEASE.jar already exists in destination.
+[INFO] commons-dbcp2-2.1.1.jar already exists in destination.
+[INFO] hibernate-validator-5.2.4.Final.jar already exists in destination.
+[INFO] javax.batch-api-1.0.1.jar already exists in destination.
+[INFO] spring-aop-4.3.5.RELEASE.jar already exists in destination.
+[INFO] jcl-over-slf4j-1.7.22.jar already exists in destination.
+[INFO] xpp3_min-1.1.4c.jar already exists in destination.
+[INFO] spring-retry-1.1.5.RELEASE.jar already exists in destination.
+[INFO] logback-classic-1.1.8.jar already exists in destination.
+[INFO] postgresql-9.4.1212.jre7.jar already exists in destination.
+[INFO] mybatis-spring-1.3.1.jar already exists in destination.
+[INFO] spring-beans-4.3.5.RELEASE.jar already exists in destination.
+[INFO] xmlpull-1.1.3.1.jar already exists in destination.
+[INFO] xstream-1.4.9.jar already exists in destination.
+[INFO] spring-batch-infrastructure-3.0.7.RELEASE.jar already exists in destination.
+[INFO] javax.inject-1.jar already exists in destination.
+[INFO] spring-expression-4.3.5.RELEASE.jar already exists in destination.
+[INFO] mybatis-3.4.2.jar already exists in destination.
+[INFO] javax.el-3.0.0.jar already exists in destination.
+[INFO] spring-context-4.3.5.RELEASE.jar already exists in destination.
+[INFO] spring-core-4.3.5.RELEASE.jar already exists in destination.
+[INFO] spring-tx-4.3.5.RELEASE.jar already exists in destination.
+[INFO] spring-jdbc-4.3.5.RELEASE.jar already exists in destination.
+[INFO] com.ibm.jbatch-tck-spi-1.0.jar already exists in destination.
+[INFO] db2jcc4-10.1.jar already exists in destination.
+[INFO] validation-api-1.1.0.Final.jar already exists in destination.
+[INFO] classmate-1.3.3.jar already exists in destination.
+[INFO] commons-pool2-2.4.2.jar already exists in destination.
+[INFO] lombok-1.16.12.jar already exists in destination.
+[INFO] jboss-logging-3.3.0.Final.jar already exists in destination.
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ TERA5x_batch-app ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 19 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.5.1:compile (default-compile) @ TERA5x_batch-app ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 16 source files to C:\gitbucket\IB2020_group\MultiStructure\TERA5x_batch\TERA5x_batch-app\target\classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] No compiler is provided in this environment. Perhaps you are running on a JRE rather than a JDK?
+[INFO] 1 error
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 4.335 s
+[INFO] Finished at: 2018-01-23T14:06:20+09:00
+[INFO] Final Memory: 13M/32M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.5.1:compile (default-compile) on project TERA5x_batch-app: Compilation failure
+[ERROR] No compiler is provided in this environment. Perhaps you are running on a JRE rather than a JDK?
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+
+https://qiita.com/takaaki4cards/items/639b4cd7544944d5e5c4
+JREをJDKに変更
+
+
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building TERASOLUNA Batch Framework for Java (5.x) Blank Project 1.0.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ TERA5x_batch-app ---
+[INFO] Deleting C:\gitbucket\IB2020_group\MultiStructure\TERA5x_batch\TERA5x_batch-app\target
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:copy-dependencies (default-cli) @ TERA5x_batch-app ---
+[INFO] jettison-1.2.jar already exists in destination.
+[INFO] mybatis-typehandlers-jsr310-1.0.2.jar already exists in destination.
+[INFO] slf4j-api-1.7.22.jar already exists in destination.
+[INFO] logback-core-1.1.8.jar already exists in destination.
+[INFO] h2-1.4.193.jar already exists in destination.
+[INFO] spring-batch-core-3.0.7.RELEASE.jar already exists in destination.
+[INFO] commons-dbcp2-2.1.1.jar already exists in destination.
+[INFO] hibernate-validator-5.2.4.Final.jar already exists in destination.
+[INFO] javax.batch-api-1.0.1.jar already exists in destination.
+[INFO] spring-aop-4.3.5.RELEASE.jar already exists in destination.
+[INFO] jcl-over-slf4j-1.7.22.jar already exists in destination.
+[INFO] xpp3_min-1.1.4c.jar already exists in destination.
+[INFO] junit-3.8.1.jar already exists in destination.
+[INFO] spring-retry-1.1.5.RELEASE.jar already exists in destination.
+[INFO] logback-classic-1.1.8.jar already exists in destination.
+[INFO] postgresql-9.4.1212.jre7.jar already exists in destination.
+[INFO] mybatis-spring-1.3.1.jar already exists in destination.
+[INFO] spring-beans-4.3.5.RELEASE.jar already exists in destination.
+[INFO] xmlpull-1.1.3.1.jar already exists in destination.
+[INFO] xstream-1.4.9.jar already exists in destination.
+[INFO] spring-batch-infrastructure-3.0.7.RELEASE.jar already exists in destination.
+[INFO] javax.inject-1.jar already exists in destination.
+[INFO] spring-expression-4.3.5.RELEASE.jar already exists in destination.
+[INFO] mybatis-3.4.2.jar already exists in destination.
+[INFO] javax.el-3.0.0.jar already exists in destination.
+[INFO] spring-context-4.3.5.RELEASE.jar already exists in destination.
+[INFO] spring-core-4.3.5.RELEASE.jar already exists in destination.
+[INFO] terasoluna-batch-5.0.0.RELEASE.jar already exists in destination.
+[INFO] spring-tx-4.3.5.RELEASE.jar already exists in destination.
+[INFO] spring-jdbc-4.3.5.RELEASE.jar already exists in destination.
+[INFO] com.ibm.jbatch-tck-spi-1.0.jar already exists in destination.
+[INFO] db2jcc4-10.1.jar already exists in destination.
+[INFO] validation-api-1.1.0.Final.jar already exists in destination.
+[INFO] classmate-1.3.3.jar already exists in destination.
+[INFO] commons-pool2-2.4.2.jar already exists in destination.
+[INFO] lombok-1.16.12.jar already exists in destination.
+[INFO] jboss-logging-3.3.0.Final.jar already exists in destination.
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ TERA5x_batch-app ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 19 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.5.1:compile (default-compile) @ TERA5x_batch-app ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 16 source files to C:\gitbucket\IB2020_group\MultiStructure\TERA5x_batch\TERA5x_batch-app\target\classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/gitbucket/IB2020_group/MultiStructure/TERA5x_batch/TERA5x_batch-app/src/main/java/jp/co/nttdata/shinkin/service/sample03/Sample03JobServiceImpl.java:[12,28] パッケージcom.brainsellers.xmlは存在しません
+[ERROR] /C:/gitbucket/IB2020_group/MultiStructure/TERA5x_batch/TERA5x_batch-app/src/main/java/jp/co/nttdata/shinkin/service/sample03/Sample03JobServiceImpl.java:[13,35] パッケージcom.brainsellers.xml.commonは存在しません
+[ERROR] /C:/gitbucket/IB2020_group/MultiStructure/TERA5x_batch/TERA5x_batch-app/src/main/java/jp/co/nttdata/shinkin/service/sample03/Sample03JobServiceImpl.java:[14,38] パッケージcom.brainsellers.xml.datatypesは存在しません
+[ERROR] /C:/gitbucket/IB2020_group/MultiStructure/TERA5x_batch/TERA5x_batch-app/src/main/java/jp/co/nttdata/shinkin/service/sample03/Sample03JobServiceImpl.java:[15,38] パッケージcom.brainsellers.xml.datatypesは存在しません
+[ERROR] /C:/gitbucket/IB2020_group/MultiStructure/TERA5x_batch/TERA5x_batch-app/src/main/java/jp/co/nttdata/shinkin/service/sample03/Sample03JobServiceImpl.java:[132,13] シンボルを見つけられません
+  シンボル:   クラス RecordType
+  場所: クラス jp.co.nttdata.shinkin.service.sample03.Sample03JobServiceImpl
+[INFO] 5 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 9.990 s
+[INFO] Finished at: 2018-01-23T14:56:55+09:00
+[INFO] Final Memory: 18M/47M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.5.1:compile (default-compile) on project TERA5x_batch-app: Compilation failure: Compilation failure:
+[ERROR] /C:/gitbucket/IB2020_group/MultiStructure/TERA5x_batch/TERA5x_batch-app/src/main/java/jp/co/nttdata/shinkin/service/sample03/Sample03JobServiceImpl.java:[12,28] パッケージcom.brainsellers.xmlは存在しません
+[ERROR] /C:/gitbucket/IB2020_group/MultiStructure/TERA5x_batch/TERA5x_batch-app/src/main/java/jp/co/nttdata/shinkin/service/sample03/Sample03JobServiceImpl.java:[13,35] パッケージcom.brainsellers.xml.commonは存在しません
+[ERROR] /C:/gitbucket/IB2020_group/MultiStructure/TERA5x_batch/TERA5x_batch-app/src/main/java/jp/co/nttdata/shinkin/service/sample03/Sample03JobServiceImpl.java:[14,38] パッケージcom.brainsellers.xml.datatypesは存在しません
+[ERROR] /C:/gitbucket/IB2020_group/MultiStructure/TERA5x_batch/TERA5x_batch-app/src/main/java/jp/co/nttdata/shinkin/service/sample03/Sample03JobServiceImpl.java:[15,38] パッケージcom.brainsellers.xml.datatypesは存在しません
+[ERROR] /C:/gitbucket/IB2020_group/MultiStructure/TERA5x_batch/TERA5x_batch-app/src/main/java/jp/co/nttdata/shinkin/service/sample03/Sample03JobServiceImpl.java:[132,13] シンボルを見つけられません
+[ERROR] シンボル:   クラス RecordType
+[ERROR] 場所: クラス jp.co.nttdata.shinkin.service.sample03.Sample03JobServiceImpl
+[ERROR] -> [Help 1]
+[ERROR] 
+
+
+http://d.hatena.ne.jp/Kazuhira/20110519/1305811057
+依存関係の定義の際にscopeが必要
+スコープ名	意味
+compile	コンパイル時に必要な依存関係。scope省略時は、これがデフォルト。コンパイル時に必要なのだから、当然テスト、実行時にも必要
+provided	コンパイル時には必要だけど、実行時には実行環境より提供されるような依存関係。servlet-api.jarなど
+runtime	コンパイル時には不要だけど、実行時には必要な依存関係。JDBCドライバなど
+test	アプリケーション本体には不要だけど、テストには必要な依存関係
+system	providedとほぼ同じですが、JARのパスを明示的に指定する必要があります
+
+
+mvn install:install-file ^
+    -Dfile=bsxml.jar ^
+    -DgroupId=com.brainsellers ^
+    -DartifactId=bsxml ^
+    -Dversion=5.0 ^
+    -Dpackaging=jar ^
+    -DgeneratePom=true
+
+mavenに無いやつだったのでローカルで登録した
+
+
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building TERASOLUNA Batch Framework for Java (5.x) Blank Project 1.0.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ TERA5x_batch-app ---
+[INFO] Deleting C:\gitbucket\IB2020_group\MultiStructure\TERA5x_batch\TERA5x_batch-app\target
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:copy-dependencies (default-cli) @ TERA5x_batch-app ---
+[INFO] Copying bcprov-jdk15on-5.0.jar to C:\gitbucket\IB2020_group\MultiStructure\TERA5x_batch\TERA5x_batch-app\lib\bcprov-jdk15on-5.0.jar
+[INFO] Copying bcpkix-jdk15on-5.0.jar to C:\gitbucket\IB2020_group\MultiStructure\TERA5x_batch\TERA5x_batch-app\lib\bcpkix-jdk15on-5.0.jar
+[INFO] Copying bspdf-5.0.jar to C:\gitbucket\IB2020_group\MultiStructure\TERA5x_batch\TERA5x_batch-app\lib\bspdf-5.0.jar
+[INFO] Copying bslib-5.0.jar to C:\gitbucket\IB2020_group\MultiStructure\TERA5x_batch\TERA5x_batch-app\lib\bslib-5.0.jar
+[INFO] Copying bsxml-5.0.jar to C:\gitbucket\IB2020_group\MultiStructure\TERA5x_batch\TERA5x_batch-app\lib\bsxml-5.0.jar
+[INFO] jettison-1.2.jar already exists in destination.
+[INFO] mybatis-typehandlers-jsr310-1.0.2.jar already exists in destination.
+[INFO] slf4j-api-1.7.22.jar already exists in destination.
+[INFO] logback-core-1.1.8.jar already exists in destination.
+[INFO] h2-1.4.193.jar already exists in destination.
+[INFO] spring-batch-core-3.0.7.RELEASE.jar already exists in destination.
+[INFO] commons-dbcp2-2.1.1.jar already exists in destination.
+[INFO] hibernate-validator-5.2.4.Final.jar already exists in destination.
+[INFO] javax.batch-api-1.0.1.jar already exists in destination.
+[INFO] spring-aop-4.3.5.RELEASE.jar already exists in destination.
+[INFO] jcl-over-slf4j-1.7.22.jar already exists in destination.
+[INFO] xpp3_min-1.1.4c.jar already exists in destination.
+[INFO] junit-3.8.1.jar already exists in destination.
+[INFO] spring-retry-1.1.5.RELEASE.jar already exists in destination.
+[INFO] logback-classic-1.1.8.jar already exists in destination.
+[INFO] postgresql-9.4.1212.jre7.jar already exists in destination.
+[INFO] mybatis-spring-1.3.1.jar already exists in destination.
+[INFO] spring-beans-4.3.5.RELEASE.jar already exists in destination.
+[INFO] xmlpull-1.1.3.1.jar already exists in destination.
+[INFO] xstream-1.4.9.jar already exists in destination.
+[INFO] spring-batch-infrastructure-3.0.7.RELEASE.jar already exists in destination.
+[INFO] javax.inject-1.jar already exists in destination.
+[INFO] spring-expression-4.3.5.RELEASE.jar already exists in destination.
+[INFO] mybatis-3.4.2.jar already exists in destination.
+[INFO] javax.el-3.0.0.jar already exists in destination.
+[INFO] spring-context-4.3.5.RELEASE.jar already exists in destination.
+[INFO] spring-core-4.3.5.RELEASE.jar already exists in destination.
+[INFO] terasoluna-batch-5.0.0.RELEASE.jar already exists in destination.
+[INFO] spring-tx-4.3.5.RELEASE.jar already exists in destination.
+[INFO] spring-jdbc-4.3.5.RELEASE.jar already exists in destination.
+[INFO] com.ibm.jbatch-tck-spi-1.0.jar already exists in destination.
+[INFO] db2jcc4-10.1.jar already exists in destination.
+[INFO] validation-api-1.1.0.Final.jar already exists in destination.
+[INFO] classmate-1.3.3.jar already exists in destination.
+[INFO] commons-pool2-2.4.2.jar already exists in destination.
+[INFO] lombok-1.16.12.jar already exists in destination.
+[INFO] jboss-logging-3.3.0.Final.jar already exists in destination.
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ TERA5x_batch-app ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 19 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.5.1:compile (default-compile) @ TERA5x_batch-app ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 16 source files to C:\gitbucket\IB2020_group\MultiStructure\TERA5x_batch\TERA5x_batch-app\target\classes
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ TERA5x_batch-app ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.5.1:testCompile (default-testCompile) @ TERA5x_batch-app ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ TERA5x_batch-app ---
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-booter/2.12.4/surefire-booter-2.12.4.pom
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-booter/2.12.4/surefire-booter-2.12.4.pom (3 KB at 1.8 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-api/2.12.4/surefire-api-2.12.4.pom
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-api/2.12.4/surefire-api-2.12.4.pom (3 KB at 9.7 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/surefire/maven-surefire-common/2.12.4/maven-surefire-common-2.12.4.pom
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/surefire/maven-surefire-common/2.12.4/maven-surefire-common-2.12.4.pom (6 KB at 18.4 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/plugin-tools/maven-plugin-annotations/3.1/maven-plugin-annotations-3.1.pom
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/plugin-tools/maven-plugin-annotations/3.1/maven-plugin-annotations-3.1.pom (2 KB at 6.3 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/plugin-tools/maven-plugin-tools/3.1/maven-plugin-tools-3.1.pom
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/plugin-tools/maven-plugin-tools/3.1/maven-plugin-tools-3.1.pom (16 KB at 46.6 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/maven-toolchain/2.0.9/maven-toolchain-2.0.9.pom
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/maven-toolchain/2.0.9/maven-toolchain-2.0.9.pom (4 KB at 14.0 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.pom
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.pom (17 KB at 61.4 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/1.3/maven-common-artifact-filters-1.3.pom
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/1.3/maven-common-artifact-filters-1.3.pom (4 KB at 14.8 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-booter/2.12.4/surefire-booter-2.12.4.jar
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-booter/2.12.4/surefire-booter-2.12.4.jar (34 KB at 96.2 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-api/2.12.4/surefire-api-2.12.4.jar
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-api/2.12.4/surefire-api-2.12.4.jar (115 KB at 278.7 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/surefire/maven-surefire-common/2.12.4/maven-surefire-common-2.12.4.jar
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/surefire/maven-surefire-common/2.12.4/maven-surefire-common-2.12.4.jar (257 KB at 542.2 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar (309 KB at 646.5 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/1.3/maven-common-artifact-filters-1.3.jar
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/1.3/maven-common-artifact-filters-1.3.jar (31 KB at 122.8 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.jar
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.jar (227 KB at 570.2 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting-api/2.0.9/maven-reporting-api-2.0.9.jar
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting-api/2.0.9/maven-reporting-api-2.0.9.jar (10 KB at 40.7 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/maven-toolchain/2.0.9/maven-toolchain-2.0.9.jar
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/maven-toolchain/2.0.9/maven-toolchain-2.0.9.jar (38 KB at 143.7 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/plugin-tools/maven-plugin-annotations/3.1/maven-plugin-annotations-3.1.jar
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/plugin-tools/maven-plugin-annotations/3.1/maven-plugin-annotations-3.1.jar (14 KB at 56.6 KB/sec)
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ TERA5x_batch-app ---
+[INFO] Building jar: C:\gitbucket\IB2020_group\MultiStructure\TERA5x_batch\TERA5x_batch-app\target\TERA5x_batch-app-1.0.0-SNAPSHOT.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 17.054 s
+[INFO] Finished at: 2018-01-23T17:23:53+09:00
+[INFO] Final Memory: 23M/102M
+[INFO] ------------------------------------------------------------------------
+
+-------------------------------------------------------
+マルチプロジェクト構成の時のコンパイルと実行方法
+terabatch
+mvn clean dependency:copy-dependencies -DoutputDirectory=lib package
+java -cp "app/*;licence/*;lib/*;lib/biz/*" org.terasoluna.batch.async.db.AsyncBatchDaemon
+
+親からの実行
+mvn -P TERA5x_batch-env,systemIn clean dependency:copy-dependencies -DoutputDirectory=lib package
+
+子からの実行
+mvn -P develop clean dependency:copy-dependencies -DoutputDirectory=lib package
+
+
+マルチプロジェクト構成時、子同士で依存関係がある時は
+親からコンパイルする必要がある
+
+子でコンパイルを行うと以下のエラーが発生する
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building TERASOLUNA Batch Framework for Java (5.x) Blank Project 1.0.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] Downloading: http://repo.terasoluna.org/nexus/content/repositories/terasoluna-batch-snapshots/jp/co/nttdata/shinkin/batch/TERA5x_batch-env/1.0-SNAPSHOT/maven-metadata.xml
+[INFO] Downloading: http://repo.terasoluna.org/nexus/content/repositories/terasoluna-batch-snapshots/jp/co/nttdata/shinkin/batch/TERA5x_batch-env/1.0-SNAPSHOT/TERA5x_batch-env-1.0-SNAPSHOT.pom
+[WARNING] The POM for jp.co.nttdata.shinkin.batch:TERA5x_batch-env:jar:1.0-SNAPSHOT is missing, no dependency information available
+[INFO] Downloading: http://repo.terasoluna.org/nexus/content/repositories/terasoluna-batch-snapshots/jp/co/nttdata/shinkin/batch/TERA5x_batch-env/1.0-SNAPSHOT/TERA5x_batch-env-1.0-SNAPSHOT.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 3.110 s
+[INFO] Finished at: 2018-01-25T11:35:59+09:00
+[INFO] Final Memory: 10M/25M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal on project TERA5x_batch-app: Could not resolve dependencies for project jp.co.nttdata.shinkin.batch:TERA5x_batch-app:jar:1.0.0-SNAPSHOT: Could not find artifact jp.co.nttdata.shinkin.batch:TERA5x_batch-env:jar:1.0-SNAPSHOT in terasoluna-batch-snapshots (http://repo.terasoluna.org/nexus/content/repositories/terasoluna-batch-snapshots/) -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException
+
+jenkinsも親からUTを行う
+
+-------------------------------------------------------
+mavenでjarを作ってローカル起動した時にエラー
+
+https://github.com/spring-projects/spring-boot/issues/8986
+
+java.io.FileNotFoundException: class path resource [jp/co/nttdata/shinkin/batch/sample03/sample03layoutPDF.xml] cannot be resolved to absolute file path because it does not reside in the file system: jar:file:/C:/work/TERA5x/app/TERA5x_batch-app-1.0.0-SNAPSHOT.jar!/jp/co/nttdata/shinkin/batch/sample03/sample03layoutPDF.xml
+        at org.springframework.util.ResourceUtils.getFile(ResourceUtils.java:218)
+        at org.springframework.core.io.AbstractFileResolvingResource.getFile(AbstractFileResolvingResource.java:52)
+        at jp.co.nttdata.shinkin.service.sharedservice.InputFileImpl.inputLayoutXml(InputFileImpl.java:31)
+        at jp.co.nttdata.shinkin.service.sample03.Sample03JobServiceImpl.createPDF(Sample03JobServiceImpl.java:89)
+        at jp.co.nttdata.shinkin.service.sample03.Sample03JobServiceImpl.makePDFfile(Sample03JobServiceImpl.java:55)
+        at jp.co.nttdata.shinkin.batch.sample03.Sample03JobTasklet.execute(Sample03JobTasklet.java:69)
+        at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+        at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+        at java.lang.reflect.Method.invoke(Unknown Source)
+        at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:333)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)
+        at org.springframework.aop.support.DelegatingIntroductionInterceptor.doProceed(DelegatingIntroductionInterceptor.java:133)
+        at org.springframework.aop.support.DelegatingIntroductionInterceptor.invoke(DelegatingIntroductionInterceptor.java:121)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179)
+        at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:213)
+        at com.sun.proxy.$Proxy25.execute(Unknown Source)
+        at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:406)
+        at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:330)
+        at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:133)
+        at org.springframework.batch.core.step.tasklet.TaskletStep$2.doInChunkContext(TaskletStep.java:271)
+        at org.springframework.batch.core.scope.context.StepContextRepeatCallback.doInIteration(StepContextRepeatCallback.java:81)
+        at org.springframework.batch.repeat.support.RepeatTemplate.getNextResult(RepeatTemplate.java:374)
+        at org.springframework.batch.repeat.support.RepeatTemplate.executeInternal(RepeatTemplate.java:215)
+        at org.springframework.batch.repeat.support.RepeatTemplate.iterate(RepeatTemplate.java:144)
+        at org.springframework.batch.core.step.tasklet.TaskletStep.doExecute(TaskletStep.java:257)
+        at org.springframework.batch.core.step.AbstractStep.execute(AbstractStep.java:200)
+        at org.springframework.batch.core.job.SimpleStepHandler.handleStep(SimpleStepHandler.java:148)
+        at org.springframework.batch.core.job.flow.JobFlowExecutor.executeStep(JobFlowExecutor.java:64)
+        at org.springframework.batch.core.job.flow.support.state.StepState.handle(StepState.java:67)
+        at org.springframework.batch.core.job.flow.support.SimpleFlow.resume(SimpleFlow.java:169)
+        at org.springframework.batch.core.job.flow.support.SimpleFlow.start(SimpleFlow.java:144)
+        at org.springframework.batch.core.job.flow.FlowJob.doExecute(FlowJob.java:134)
+        at org.springframework.batch.core.job.AbstractJob.execute(AbstractJob.java:306)
+        at org.springframework.batch.core.launch.support.SimpleJobLauncher$1.run(SimpleJobLauncher.java:135)
+        at org.springframework.core.task.SyncTaskExecutor.execute(SyncTaskExecutor.java:50)
+        at org.springframework.batch.core.launch.support.SimpleJobLauncher.run(SimpleJobLauncher.java:128)
+        at org.springframework.batch.core.launch.support.SimpleJobOperator.start(SimpleJobOperator.java:314)
+        at org.terasoluna.batch.async.db.JobRequestPollTask.executeJob(JobRequestPollTask.java:227)
+        at org.terasoluna.batch.async.db.JobRequestPollTask.lambda$0(JobRequestPollTask.java:203)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+        at java.lang.Thread.run(Unknown Source)
+
+
+sample03layoutPDF.xmlが二重に存在していたため
+⇒マルチプロジェクト構成にするときに両方のプロジェクトに置いてしまった
+
+片方消して・・・違った
+
+リソースがファイルであると仮定するのではなく、入力ストリームを使用して読み取る必要があります。
+https://github.com/spring-projects/spring-boot/issues/10983
+https://coderanch.com/t/474047/framework/Spring-find-file-classpath-JAR
+
+STS上では正常に起動するが、jarに固めた状態から起動でエラーが発生する
+[2018/01/25 13:48:51] [daemonTaskExecutor-1] [j.c.n.s.s.s.Sample03JobServiceImpl] [INFO ] □□□□□□PDF作成中開始□□□□□□
+one★★★★★★★★★★★★★★★★★★★★
+jp/co/nttdata/shinkin/batch/sample03/sample03layoutPDF.xml
+two★★★★★★★★★★★★★★★★★★★★
+file:/C:/work/TERA5x/app/TERA5x_batch-app-1.0.0-SNAPSHOT.jar!/jp/co/nttdata/shinkin/batch/sample03/sample03layoutPDF.xml
+three★★★★★★★★★★★★★★★★★★★★
+four★★★★★★★★★★★★★★★★★★★★
+java.io.FileNotFoundException: file:\C:\work\TERA5x\app\TERA5x_batch-app-1.0.0-SNAPSHOT.jar!\jp\co\nttdata\shinkin\batch\sample03\sample03layoutPDF.xml (ファイル名、ディレクトリ名、またはボリューム ラベルの構文が間違ってい
+        at java.io.FileInputStream.open0(Native Method)
+        at java.io.FileInputStream.open(Unknown Source)
+        at java.io.FileInputStream.<init>(Unknown Source)
+        at jp.co.nttdata.shinkin.service.sharedservice.InputFileImpl.inputLayoutXml(InputFileImpl.java:39)
+        at jp.co.nttdata.shinkin.service.sample03.Sample03JobServiceImpl.createPDF(Sample03JobServiceImpl.java:89)
+        at jp.co.nttdata.shinkin.service.sample03.Sample03JobServiceImpl.makePDFfile(Sample03JobServiceImpl.java:55)
+        at jp.co.nttdata.shinkin.batch.sample03.Sample03JobTasklet.execute(Sample03JobTasklet.java:69)
+        at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+        at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+        at java.lang.reflect.Method.invoke(Unknown Source)
+        at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:333)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)
+        at org.springframework.aop.support.DelegatingIntroductionInterceptor.doProceed(DelegatingIntroductionInterceptor.java:133)
+        at org.springframework.aop.support.DelegatingIntroductionInterceptor.invoke(DelegatingIntroductionInterceptor.java:121)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179)
+        at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:213)
+        at com.sun.proxy.$Proxy24.execute(Unknown Source)
+        at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:406)
+        at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:330)
+        at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:133)
+        at org.springframework.batch.core.step.tasklet.TaskletStep$2.doInChunkContext(TaskletStep.java:271)
+        at org.springframework.batch.core.scope.context.StepContextRepeatCallback.doInIteration(StepContextRepeatCallback.java:81)
+        at org.springframework.batch.repeat.support.RepeatTemplate.getNextResult(RepeatTemplate.java:374)
+        at org.springframework.batch.repeat.support.RepeatTemplate.executeInternal(RepeatTemplate.java:215)
+        at org.springframework.batch.repeat.support.RepeatTemplate.iterate(RepeatTemplate.java:144)
+        at org.springframework.batch.core.step.tasklet.TaskletStep.doExecute(TaskletStep.java:257)
+        at org.springframework.batch.core.step.AbstractStep.execute(AbstractStep.java:200)
+        at org.springframework.batch.core.job.SimpleStepHandler.handleStep(SimpleStepHandler.java:148)
+        at org.springframework.batch.core.job.flow.JobFlowExecutor.executeStep(JobFlowExecutor.java:64)
+        at org.springframework.batch.core.job.flow.support.state.StepState.handle(StepState.java:67)
+        at org.springframework.batch.core.job.flow.support.SimpleFlow.resume(SimpleFlow.java:169)
+        at org.springframework.batch.core.job.flow.support.SimpleFlow.start(SimpleFlow.java:144)
+        at org.springframework.batch.core.job.flow.FlowJob.doExecute(FlowJob.java:134)
+        at org.springframework.batch.core.job.AbstractJob.execute(AbstractJob.java:306)
+        at org.springframework.batch.core.launch.support.SimpleJobLauncher$1.run(SimpleJobLauncher.java:135)
+        at org.springframework.core.task.SyncTaskExecutor.execute(SyncTaskExecutor.java:50)
+        at org.springframework.batch.core.launch.support.SimpleJobLauncher.run(SimpleJobLauncher.java:128)
+        at org.springframework.batch.core.launch.support.SimpleJobOperator.start(SimpleJobOperator.java:314)
+        at org.terasoluna.batch.async.db.JobRequestPollTask.executeJob(JobRequestPollTask.java:227)
+        at org.terasoluna.batch.async.db.JobRequestPollTask.lambda$0(JobRequestPollTask.java:203)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+        at java.lang.Thread.run(Unknown Source)
+jarの中のリソースにうまくアクセスできていない
+
+@Service
+public class InputFileImpl implements InputFile {
+
+    @Inject
+    ResourceLoader resourceLoader;
+
+    @Override
+    public InputStream inputLayoutXml(String layoutXml) throws IOException {
+
+        System.out.println("one★★★★★★★★★★★★★★★★★★★★");
+        System.out.println(layoutXml);
+        System.out.println("two★★★★★★★★★★★★★★★★★★★★");
+        System.out.println(resourceLoader.getResource("classpath:" + layoutXml).getURL().getFile());
+        System.out.println("three★★★★★★★★★★★★★★★★★★★★");
+        //System.out.println(resourceLoader.getResource("classpath:" + layoutXml).getFile());
+        System.out.println("four★★★★★★★★★★★★★★★★★★★★");
+        URL url = resourceLoader.getResource("classpath:" + layoutXml).getURL();
+        System.out.println(url);
+        System.out.println("five★★★★★★★★★★★★★★★★★★★★");
+        
+        InputStream fileStream = url.openStream();
+        return fileStream;
+    }
+    
+    /*
+    @Override
+    public InputStream inputLayoutXml(String layoutXml) throws IOException {
+
+        System.out.println("one★★★★★★★★★★★★★★★★★★★★");
+        System.out.println(layoutXml);
+        System.out.println("two★★★★★★★★★★★★★★★★★★★★");
+        System.out.println(resourceLoader.getResource("classpath:" + layoutXml).getURL().getFile());
+        System.out.println("three★★★★★★★★★★★★★★★★★★★★");
+        //System.out.println(resourceLoader.getResource("classpath:" + layoutXml).getFile());
+        System.out.println("four★★★★★★★★★★★★★★★★★★★★");
+        
+        File xmlFile = new File(resourceLoader.getResource("classpath:"
+                + layoutXml).getURL().getFile());
+        InputStream fileStream = new FileInputStream(xmlFile);
+        return fileStream;
+    }
+    */
+    /*
+     * @Override public InputStream inputLayoutXml(String layoutXml) throws IOException { Resource resource =
+     * resourceLoader.getResource("classpath:" + layoutXml); 
+     * File xmlFile = resource.getFile();
+     * InputStream fileStream = new FileInputStream(xmlFile); return fileStream; }
+     */
+
+}
+
+
+urlから直接読み込めばうまくいく
+
+-------------------------------------------------------
+
+xmlファイルをstringに変換するときにエラー
+原因はネームスペースの定義をしてないから。
+ではなく、子どもの節以降を読み込むように設定されていたから
+getchild()ではなくgetparent()を指定する
+
+1 26, 2018 5:17:04 午後 org.apache.catalina.startup.Catalina load
+情報: Initialization processed in 1425 ms
+1 26, 2018 5:17:29 午後 org.apache.catalina.startup.Catalina start
+情報: Server startup in 25127 ms
+ERROR:  '接頭辞'bs'のネームスペースが宣言されていません。'
+javax.xml.transform.TransformerException: java.lang.RuntimeException: 接頭辞'bs'のネームスペースが宣言されていません。
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:746)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:351)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.transform(WSS_JAXWS_Sample4verXmlData.java:238)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.convertToString(WSS_JAXWS_Sample4verXmlData.java:220)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.createlayout(WSS_JAXWS_Sample4verXmlData.java:201)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.generate(WSS_JAXWS_Sample4verXmlData.java:173)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.doGet(WSS_JAXWS_Sample4verXmlData.java:110)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:635)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:478)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:650)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:803)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1459)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.lang.RuntimeException: 接頭辞'bs'のネームスペースが宣言されていません。
+	at com.sun.org.apache.xml.internal.serializer.SerializerBase.getNamespaceURI(SerializerBase.java:915)
+	at com.sun.org.apache.xml.internal.serializer.SerializerBase.addAttribute(SerializerBase.java:431)
+	at com.sun.org.apache.xml.internal.serializer.ToUnknownStream.addAttribute(ToUnknownStream.java:316)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:201)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:94)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transformIdentity(TransformerImpl.java:693)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:737)
+	... 30 more
+---------
+java.lang.RuntimeException: 接頭辞'bs'のネームスペースが宣言されていません。
+	at com.sun.org.apache.xml.internal.serializer.SerializerBase.getNamespaceURI(SerializerBase.java:915)
+	at com.sun.org.apache.xml.internal.serializer.SerializerBase.addAttribute(SerializerBase.java:431)
+	at com.sun.org.apache.xml.internal.serializer.ToUnknownStream.addAttribute(ToUnknownStream.java:316)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:201)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:94)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transformIdentity(TransformerImpl.java:693)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:737)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:351)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.transform(WSS_JAXWS_Sample4verXmlData.java:238)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.convertToString(WSS_JAXWS_Sample4verXmlData.java:220)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.createlayout(WSS_JAXWS_Sample4verXmlData.java:201)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.generate(WSS_JAXWS_Sample4verXmlData.java:173)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.doGet(WSS_JAXWS_Sample4verXmlData.java:110)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:635)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:478)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:650)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:803)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1459)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+ERROR:  '接頭辞'bs'のネームスペースが宣言されていません。'
+javax.xml.transform.TransformerException: java.lang.RuntimeException: 接頭辞'bs'のネームスペースが宣言されていません。
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:746)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:351)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.transform(WSS_JAXWS_Sample4verXmlData.java:238)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.convertToString(WSS_JAXWS_Sample4verXmlData.java:220)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.createlayout(WSS_JAXWS_Sample4verXmlData.java:201)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.generate(WSS_JAXWS_Sample4verXmlData.java:173)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.doGet(WSS_JAXWS_Sample4verXmlData.java:110)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:635)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:478)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:650)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:803)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1459)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.lang.RuntimeException: 接頭辞'bs'のネームスペースが宣言されていません。
+	at com.sun.org.apache.xml.internal.serializer.SerializerBase.getNamespaceURI(SerializerBase.java:915)
+	at com.sun.org.apache.xml.internal.serializer.SerializerBase.addAttribute(SerializerBase.java:431)
+	at com.sun.org.apache.xml.internal.serializer.ToUnknownStream.addAttribute(ToUnknownStream.java:316)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:201)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:94)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transformIdentity(TransformerImpl.java:693)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:737)
+	... 30 more
+---------
+java.lang.RuntimeException: 接頭辞'bs'のネームスペースが宣言されていません。
+	at com.sun.org.apache.xml.internal.serializer.SerializerBase.getNamespaceURI(SerializerBase.java:915)
+	at com.sun.org.apache.xml.internal.serializer.SerializerBase.addAttribute(SerializerBase.java:431)
+	at com.sun.org.apache.xml.internal.serializer.ToUnknownStream.addAttribute(ToUnknownStream.java:316)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:201)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:94)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transformIdentity(TransformerImpl.java:693)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:737)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:351)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.transform(WSS_JAXWS_Sample4verXmlData.java:238)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.convertToString(WSS_JAXWS_Sample4verXmlData.java:220)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.createlayout(WSS_JAXWS_Sample4verXmlData.java:201)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.generate(WSS_JAXWS_Sample4verXmlData.java:173)
+	at sample04.controller.WSS_JAXWS_Sample4verXmlData.doGet(WSS_JAXWS_Sample4verXmlData.java:110)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:635)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:478)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:650)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:803)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1459)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+
+
+
+-------------------------------------------------------
+FTPClientでIMAGE_FILE_TYPEの定数が使えない
+
+状況
+if (ftpCl.changeWorkingDirectory(imgLogoAdds)) {
+					ftpCl.setFileType(FTP.IMAGE_FILE_TYPE);
+					if (ftpCl.storeFile(newFileName, streamKinko)) {
+						ftpCl.site("chmod 757 " + newFileName);
+					} else {
+						return false;
+					}
+				}
+
+
+エラー内容
+
+原因
+FTPClientには２つのバージョンが存在
+https://commons.apache.org/proper/commons-net/download_net.cgi
+Apache Commons Net 3.6 API
+Commons Net 1.4.1 API
+
+IMAGE_FILE_TYPEが存在するのはCommons Net 1.4.1 APIのバージョンの方のみであり、
+Apache Commons Net 3.6 APIのライブラリを使っていたため
+
+解決策
+IMAGE_FILE_TYPE⇒BINARY_FILE_TYPEに変更する
+
+
+-------------------------------------------------------
+使用環境
+java.lang.Error: Unresolved compilation problems: 
+    log cannot be resolved
+状況
+
+エラー内容
+
+[2018/02/06 16:34:58] [daemonTaskExecutor-2] [o.s.b.c.j.SimpleStepHandler] [INFO ] Executing step: [sample01Job.step01]
+[2018/02/06 16:34:58] [daemonTaskExecutor-2] [o.s.b.c.s.AbstractStep] [ERROR] Encountered an error executing step sample01Job.step01 in job sample01Job
+java.lang.Error: Unresolved compilation problems: 
+    log cannot be resolved
+    log cannot be resolved
+    log cannot be resolved
+    log cannot be resolved
+    log cannot be resolved
+    log cannot be resolved
+at jp.co.nttdata.shinkin.batch.sample01.Sample01JobTasklet.execute(Sample01JobTasklet.java:30)
+at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.lang.reflect.Method.invoke(Method.java:498)
+
+
+原因
+https://qa.atmarkit.co.jp/q/5818
+⇒文字コードの問題？
+ワークスペース⇒テキスト・ファイル・エンコード
+⇒MS932→UTF-8
+
+https://stackoverflow.com/questions/1124788/java-unresolved-compilation-problem
+⇒maven clean して再度実行？
+https://stackoverflow.com/questions/48220822/java-log-cannot-be-resolved?rq=1
+⇒ Lombokインストールできてない？
+⇒lombok.log.fieldName = xxxを使用して、変数を別のものにログする名前を変更するlombok.configファイルがありますか
+
+解決策
+https://qa.atmarkit.co.jp/q/5818
+⇒文字コードの問題？
+ワークスペース⇒テキスト・ファイル・エンコード
+⇒MS932→UTF-8
+-------------------------------------------------------
+使用環境
+
+状況
+Spring batch 起動時に発生
+
+
+エラー内容
+SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]
+[2018/02/06 18:17:35] [main] [o.s.c.s.ClassPathXmlApplicationContext] [INFO ] Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@100a15d: startup date [Tue Feb 06 18:17:35 JST 2018]; root of context hierarchy
+[2018/02/06 18:17:35] [main] [o.s.b.f.x.XmlBeanDefinitionReader] [INFO ] Loading XML bean definitions from class path resource [META-INF/jobs/sample03/sample03.xml]
+[2018/02/06 18:17:35] [main] [o.s.b.f.x.XmlBeanDefinitionReader] [INFO ] Loading XML bean definitions from class path resource [META-INF/spring/job-base-context.xml]
+[2018/02/06 18:17:35] [main] [o.s.b.f.x.XmlBeanDefinitionReader] [INFO ] Loading XML bean definitions from class path resource [META-INF/spring/launch-context.xml]
+[2018/02/06 18:17:36] [main] [o.s.b.f.c.PropertyPlaceholderConfigurer] [INFO ] Loading properties file from class path resource [batch-application.properties]
+[2018/02/06 18:17:36] [main] [o.s.b.f.c.PropertyPlaceholderConfigurer] [INFO ] Loading properties file from class path resource [META-INF/jobs/sample03/sample03.properties]
+[2018/02/06 18:17:36] [main] [o.s.b.f.s.DefaultListableBeanFactory] [INFO ] Overriding bean definition for bean 'sample01JobTasklet' with a different definition: replacing [Generic bean: class [jp.co.nttdata.shinkin.batch.sample01.Sample01JobTasklet]; scope=step; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=false; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample01\Sample01JobTasklet.class]] with [Root bean: class [org.springframework.aop.scope.ScopedProxyFactoryBean]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in BeanDefinition defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample01\Sample01JobTasklet.class]]
+[2018/02/06 18:17:36] [main] [o.s.b.f.s.DefaultListableBeanFactory] [INFO ] Overriding bean definition for bean 'sample02JobTasklet' with a different definition: replacing [Generic bean: class [jp.co.nttdata.shinkin.batch.sample02.Sample02JobTasklet]; scope=step; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=false; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample02\Sample02JobTasklet.class]] with [Root bean: class [org.springframework.aop.scope.ScopedProxyFactoryBean]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in BeanDefinition defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample02\Sample02JobTasklet.class]]
+[2018/02/06 18:17:36] [main] [o.s.b.f.s.DefaultListableBeanFactory] [INFO ] Overriding bean definition for bean 'sample03JobTasklet' with a different definition: replacing [Generic bean: class [jp.co.nttdata.shinkin.batch.sample03.Sample03JobTasklet]; scope=step; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=false; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample03\Sample03JobTasklet.class]] with [Root bean: class [org.springframework.aop.scope.ScopedProxyFactoryBean]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in BeanDefinition defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample03\Sample03JobTasklet.class]]
+[2018/02/06 18:17:36] [main] [o.s.b.f.s.DefaultListableBeanFactory] [INFO ] Overriding bean definition for bean 'sample04JobTasklet' with a different definition: replacing [Generic bean: class [jp.co.nttdata.shinkin.batch.sample04.Sample04JobTasklet]; scope=step; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=false; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample04\Sample04JobTasklet.class]] with [Root bean: class [org.springframework.aop.scope.ScopedProxyFactoryBean]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in BeanDefinition defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample04\Sample04JobTasklet.class]]
+[2018/02/06 18:17:36] [main] [o.s.b.f.a.AutowiredAnnotationBeanPostProcessor] [INFO ] JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+[2018/02/06 18:17:36] [main] [o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker] [INFO ] Bean 'jobRegistry' of type [class org.springframework.batch.core.configuration.support.MapJobRegistry] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[2018/02/06 18:17:38] [main] [o.s.b.c.r.s.JobRepositoryFactoryBean] [INFO ] No database type set, using meta data indicating: DB2
+[2018/02/06 18:17:39] [main] [o.s.b.c.l.s.SimpleJobLauncher] [INFO ] No TaskExecutor has been set, defaulting to synchronous executor.
+[2018/02/06 18:17:39] [main] [o.s.j.d.i.ScriptUtils ] [INFO ] Executing SQL script from class path resource [ddl/schema-db2.sql]
+[2018/02/06 18:17:39] [main] [o.s.j.d.i.ScriptUtils ] [INFO ] Executed SQL script from class path resource [ddl/schema-db2.sql] in 38 ms.
+[2018/02/06 18:17:39] [main] [o.s.j.d.i.ScriptUtils ] [INFO ] Executing SQL script from class path resource [org/terasoluna/batch/async/db/schema-commit.sql]
+[2018/02/06 18:17:39] [main] [o.s.j.d.i.ScriptUtils ] [INFO ] Executed SQL script from class path resource [org/terasoluna/batch/async/db/schema-commit.sql] in 5 ms.
+[2018/02/06 18:17:39] [main] [o.h.v.i.util.Version  ] [INFO ] HV000001: Hibernate Validator 5.2.4.Final
+[2018/02/06 18:17:40] [main] [o.s.c.s.ClassPathXmlApplicationContext] [WARN ] Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'jobSqlSessionFactory' defined in class path resource [META-INF/spring/launch-context.xml]: Invocation of init method failed; nested exception is org.springframework.core.NestedIOException: Failed to parse config resource: class path resource [META-INF/mybatis/mybatis-config.xml]; nested exception is org.apache.ibatis.builder.BuilderException: Error parsing SQL Mapper Configuration. Cause: org.apache.ibatis.type.TypeException: The alias 'UserDTO' is already mapped to the value 'jp.co.nttdata.shinkin.repository.sample02.UserDTO'.
+[2018/02/06 18:17:40] [main] [o.s.b.c.l.s.CommandLineJobRunner] [ERROR] Job Terminated in error: Error creating bean with name 'jobSqlSessionFactory' defined in class path resource [META-INF/spring/launch-context.xml]: Invocation of init method failed; nested exception is org.springframework.core.NestedIOException: Failed to parse config resource: class path resource [META-INF/mybatis/mybatis-config.xml]; nested exception is org.apache.ibatis.builder.BuilderException: Error parsing SQL Mapper Configuration. Cause: org.apache.ibatis.type.TypeException: The alias 'UserDTO' is already mapped to the value 'jp.co.nttdata.shinkin.repository.sample02.UserDTO'.
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'jobSqlSessionFactory' defined in class path resource [META-INF/spring/launch-context.xml]: Invocation of init method failed; nested exception is org.springframework.core.NestedIOException: Failed to parse config resource: class path resource [META-INF/mybatis/mybatis-config.xml]; nested exception is org.apache.ibatis.builder.BuilderException: Error parsing SQL Mapper Configuration. Cause: org.apache.ibatis.type.TypeException: The alias 'UserDTO' is already mapped to the value 'jp.co.nttdata.shinkin.repository.sample02.UserDTO'.
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1589)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:554)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:740)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:866)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:542)
+	at org.springframework.context.support.ClassPathXmlApplicationContext.<init>(ClassPathXmlApplicationContext.java:139)
+	at org.springframework.context.support.ClassPathXmlApplicationContext.<init>(ClassPathXmlApplicationContext.java:83)
+	at org.springframework.batch.core.launch.support.CommandLineJobRunner.start(CommandLineJobRunner.java:290)
+	at org.springframework.batch.core.launch.support.CommandLineJobRunner.main(CommandLineJobRunner.java:592)
+Caused by: org.springframework.core.NestedIOException: Failed to parse config resource: class path resource [META-INF/mybatis/mybatis-config.xml]; nested exception is org.apache.ibatis.builder.BuilderException: Error parsing SQL Mapper Configuration. Cause: org.apache.ibatis.type.TypeException: The alias 'UserDTO' is already mapped to the value 'jp.co.nttdata.shinkin.repository.sample02.UserDTO'.
+	at org.mybatis.spring.SqlSessionFactoryBean.buildSqlSessionFactory(SqlSessionFactoryBean.java:500)
+	at org.mybatis.spring.SqlSessionFactoryBean.afterPropertiesSet(SqlSessionFactoryBean.java:380)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1648)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1585)
+	... 13 common frames omitted
+Caused by: org.apache.ibatis.builder.BuilderException: Error parsing SQL Mapper Configuration. Cause: org.apache.ibatis.type.TypeException: The alias 'UserDTO' is already mapped to the value 'jp.co.nttdata.shinkin.repository.sample02.UserDTO'.
+	at org.apache.ibatis.builder.xml.XMLConfigBuilder.parseConfiguration(XMLConfigBuilder.java:120)
+	at org.apache.ibatis.builder.xml.XMLConfigBuilder.parse(XMLConfigBuilder.java:98)
+	at org.mybatis.spring.SqlSessionFactoryBean.buildSqlSessionFactory(SqlSessionFactoryBean.java:494)
+	... 16 common frames omitted
+Caused by: org.apache.ibatis.type.TypeException: The alias 'UserDTO' is already mapped to the value 'jp.co.nttdata.shinkin.repository.sample02.UserDTO'.
+	at org.apache.ibatis.type.TypeAliasRegistry.registerAlias(TypeAliasRegistry.java:157)
+	at org.apache.ibatis.type.TypeAliasRegistry.registerAlias(TypeAliasRegistry.java:147)
+	at org.apache.ibatis.type.TypeAliasRegistry.registerAliases(TypeAliasRegistry.java:136)
+	at org.apache.ibatis.type.TypeAliasRegistry.registerAliases(TypeAliasRegistry.java:125)
+	at org.apache.ibatis.builder.xml.XMLConfigBuilder.typeAliasesElement(XMLConfigBuilder.java:158)
+	at org.apache.ibatis.builder.xml.XMLConfigBuilder.parseConfiguration(XMLConfigBuilder.java:108)
+	... 18 common frames omitted
+
+
+原因
+
+同じ名前のクラスファイルが存在し、どっちも読み込もうとして競合した。
+
+
+解決策
+クラスファイルの名前を変更する
+
+
+-------------------------------------------------------
+使用環境
+
+状況
+
+spring batch 起動でエラー
+
+エラー内容
+SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]
+[2018/02/06 18:33:40] [main] [o.s.c.s.ClassPathXmlApplicationContext] [INFO ] Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@100a15d: startup date [Tue Feb 06 18:33:40 JST 2018]; root of context hierarchy
+[2018/02/06 18:33:40] [main] [o.s.b.f.x.XmlBeanDefinitionReader] [INFO ] Loading XML bean definitions from class path resource [META-INF/jobs/sample03/sample03.xml]
+[2018/02/06 18:33:40] [main] [o.s.b.f.x.XmlBeanDefinitionReader] [INFO ] Loading XML bean definitions from class path resource [META-INF/spring/job-base-context.xml]
+[2018/02/06 18:33:40] [main] [o.s.b.f.x.XmlBeanDefinitionReader] [INFO ] Loading XML bean definitions from class path resource [META-INF/spring/launch-context.xml]
+[2018/02/06 18:33:41] [main] [o.s.b.f.c.PropertyPlaceholderConfigurer] [INFO ] Loading properties file from class path resource [batch-application.properties]
+[2018/02/06 18:33:41] [main] [o.s.b.f.c.PropertyPlaceholderConfigurer] [INFO ] Loading properties file from class path resource [META-INF/jobs/sample03/sample03.properties]
+[2018/02/06 18:33:41] [main] [o.s.b.f.s.DefaultListableBeanFactory] [INFO ] Overriding bean definition for bean 'sample01JobTasklet' with a different definition: replacing [Generic bean: class [jp.co.nttdata.shinkin.batch.sample01.Sample01JobTasklet]; scope=step; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=false; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample01\Sample01JobTasklet.class]] with [Root bean: class [org.springframework.aop.scope.ScopedProxyFactoryBean]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in BeanDefinition defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample01\Sample01JobTasklet.class]]
+[2018/02/06 18:33:41] [main] [o.s.b.f.s.DefaultListableBeanFactory] [INFO ] Overriding bean definition for bean 'sample02JobTasklet' with a different definition: replacing [Generic bean: class [jp.co.nttdata.shinkin.batch.sample02.Sample02JobTasklet]; scope=step; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=false; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample02\Sample02JobTasklet.class]] with [Root bean: class [org.springframework.aop.scope.ScopedProxyFactoryBean]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in BeanDefinition defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample02\Sample02JobTasklet.class]]
+[2018/02/06 18:33:41] [main] [o.s.b.f.s.DefaultListableBeanFactory] [INFO ] Overriding bean definition for bean 'sample03JobTasklet' with a different definition: replacing [Generic bean: class [jp.co.nttdata.shinkin.batch.sample03.Sample03JobTasklet]; scope=step; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=false; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample03\Sample03JobTasklet.class]] with [Root bean: class [org.springframework.aop.scope.ScopedProxyFactoryBean]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in BeanDefinition defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample03\Sample03JobTasklet.class]]
+[2018/02/06 18:33:41] [main] [o.s.b.f.s.DefaultListableBeanFactory] [INFO ] Overriding bean definition for bean 'sample04JobTasklet' with a different definition: replacing [Generic bean: class [jp.co.nttdata.shinkin.batch.sample04.Sample04JobTasklet]; scope=step; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=false; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample04\Sample04JobTasklet.class]] with [Root bean: class [org.springframework.aop.scope.ScopedProxyFactoryBean]; scope=; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in BeanDefinition defined in file [C:\gitbucket\IB2020_group\TERA5x_batch\shinkin-batch\target\classes\jp\co\nttdata\shinkin\batch\sample04\Sample04JobTasklet.class]]
+[2018/02/06 18:33:41] [main] [o.s.b.f.a.AutowiredAnnotationBeanPostProcessor] [INFO ] JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+[2018/02/06 18:33:41] [main] [o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker] [INFO ] Bean 'jobRegistry' of type [class org.springframework.batch.core.configuration.support.MapJobRegistry] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[2018/02/06 18:33:42] [main] [o.s.b.c.r.s.JobRepositoryFactoryBean] [INFO ] No database type set, using meta data indicating: DB2
+[2018/02/06 18:33:42] [main] [o.s.b.c.l.s.SimpleJobLauncher] [INFO ] No TaskExecutor has been set, defaulting to synchronous executor.
+[2018/02/06 18:33:43] [main] [o.s.j.d.i.ScriptUtils ] [INFO ] Executing SQL script from class path resource [ddl/schema-db2.sql]
+[2018/02/06 18:33:43] [main] [o.s.j.d.i.ScriptUtils ] [INFO ] Executed SQL script from class path resource [ddl/schema-db2.sql] in 38 ms.
+[2018/02/06 18:33:43] [main] [o.s.j.d.i.ScriptUtils ] [INFO ] Executing SQL script from class path resource [org/terasoluna/batch/async/db/schema-commit.sql]
+[2018/02/06 18:33:43] [main] [o.s.j.d.i.ScriptUtils ] [INFO ] Executed SQL script from class path resource [org/terasoluna/batch/async/db/schema-commit.sql] in 3 ms.
+[2018/02/06 18:33:43] [main] [o.h.v.i.util.Version  ] [INFO ] HV000001: Hibernate Validator 5.2.4.Final
+[2018/02/06 18:33:43] [main] [o.s.c.s.ClassPathXmlApplicationContext] [WARN ] Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sample02JobService': Unsatisfied dependency expressed through field 'repos'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'jp.co.nttdata.shinkin.repository.sample02.Sample02Repository' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@javax.inject.Inject()}
+[2018/02/06 18:33:43] [main] [o.s.b.c.l.s.CommandLineJobRunner] [ERROR] Job Terminated in error: Error creating bean with name 'sample02JobService': Unsatisfied dependency expressed through field 'repos'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'jp.co.nttdata.shinkin.repository.sample02.Sample02Repository' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@javax.inject.Inject()}
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sample02JobService': Unsatisfied dependency expressed through field 'repos'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'jp.co.nttdata.shinkin.repository.sample02.Sample02Repository' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@javax.inject.Inject()}
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:588)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1225)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:552)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:759)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:866)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:542)
+	at org.springframework.context.support.ClassPathXmlApplicationContext.<init>(ClassPathXmlApplicationContext.java:139)
+	at org.springframework.context.support.ClassPathXmlApplicationContext.<init>(ClassPathXmlApplicationContext.java:83)
+	at org.springframework.batch.core.launch.support.CommandLineJobRunner.start(CommandLineJobRunner.java:290)
+	at org.springframework.batch.core.launch.support.CommandLineJobRunner.main(CommandLineJobRunner.java:592)
+Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'jp.co.nttdata.shinkin.repository.sample02.Sample02Repository' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@javax.inject.Inject()}
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.raiseNoMatchingBeanFound(DefaultListableBeanFactory.java:1474)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1102)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1064)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:585)
+	... 16 common frames omitted
+	
+原因
+
+component-scanを行う位置がずれていた
+<context:component-scan
+        base-package="jp.co.nttdata.shinkin.batch.sample03,
+  						jp.co.nttdata.shinkin.service.sample03,
+ 						jp.co.nttdata.shinkin.repository.sample03" />
+
+解決策
+
+-------------------------------------------------------
+使用環境
+STSで実行、デバッグしたのにコンソールに表示されない。
+状況
+
+エラー内容
+
+原因
+コンソールに表示する設定ができていなかった。
+
+解決策
+「実行」⇒「実行の構成」⇒実行していた設定→「共通」
+標準入出力⇒コンソールに割り当て（A）（入力に必要）にチェックを入れる
+-------------------------------------------------------
+使用環境
+STSで実行、デバッグしても起動しない。
+状況
+
+エラー内容
+
+原因
+実行の構成の設定がうまくできていなかった
+
+解決策
+「実行の構成」⇒実行していた設定→「クラスパス」
+デフォルト・エントリーの復元をクリック
+「ブートストラップ・エントリー」「ユーザー・エントリー」にライブラリ・プロジェクト系が設定されたことを確認
+再度実行する。
+-------------------------------------------------------
+使用環境
+mybatisでstring型を${}でパラメータを渡そうとしたらエラー
+
+状況
+KinkoInfo = repository.getKinkoInfo(schema);
+
+
+<select id="getKinkoInfo" resultMap="getKinkoInfo" parameterType="string">
+        <![CDATA[
+            SELECT
+                設置金融機関コード,
+                設置店舗コード
+            FROM
+                ${schema}.ＣＴ金庫情報
+            WHERE
+                主キー = 1
+        ]]>
+</select>
+
+public CTkinkojohoDTO getKinkoInfo(String schema);
+
+エラー内容
+[2018/02/09 14:20:39] [main] [o.s.b.c.s.AbstractStep] [ERROR] Encountered an error executing step BKP00075.step01 in job BKP00075
+org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.reflection.ReflectionException: There is no getter for property named 'schema' in 'class java.lang.String'
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:77)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:446)
+	at com.sun.proxy.$Proxy17.selectOne(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectOne(SqlSessionTemplate.java:166)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:82)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:59)
+	at com.sun.proxy.$Proxy19.getKinkoInfo(Unknown Source)
+	at jp.co.nttdata.shinkin.service.BKP00075.BKP00075ServiceImpl.createPdf(BKP00075ServiceImpl.java:43)
+	at jp.co.nttdata.shinkin.batch.BKP00075.BKP00075Tasklet.execute(BKP00075Tasklet.java:66)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:333)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)
+	at org.springframework.aop.support.DelegatingIntroductionInterceptor.doProceed(DelegatingIntroductionInterceptor.java:133)
+	at org.springframework.aop.support.DelegatingIntroductionInterceptor.invoke(DelegatingIntroductionInterceptor.java:121)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179)
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:213)
+	at com.sun.proxy.$Proxy9.execute(Unknown Source)
+	at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:406)
+	at org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:330)
+	at org.springframework.transaction.support.TransactionTemplate.execute(TransactionTemplate.java:133)
+	at org.springframework.batch.core.step.tasklet.TaskletStep$2.doInChunkContext(TaskletStep.java:271)
+	at org.springframework.batch.core.scope.context.StepContextRepeatCallback.doInIteration(StepContextRepeatCallback.java:81)
+	at org.springframework.batch.repeat.support.RepeatTemplate.getNextResult(RepeatTemplate.java:374)
+	at org.springframework.batch.repeat.support.RepeatTemplate.executeInternal(RepeatTemplate.java:215)
+	at org.springframework.batch.repeat.support.RepeatTemplate.iterate(RepeatTemplate.java:144)
+	at org.springframework.batch.core.step.tasklet.TaskletStep.doExecute(TaskletStep.java:257)
+	at org.springframework.batch.core.step.AbstractStep.execute(AbstractStep.java:200)
+	at org.springframework.batch.core.job.SimpleStepHandler.handleStep(SimpleStepHandler.java:148)
+	at org.springframework.batch.core.job.flow.JobFlowExecutor.executeStep(JobFlowExecutor.java:64)
+	at org.springframework.batch.core.job.flow.support.state.StepState.handle(StepState.java:67)
+	at org.springframework.batch.core.job.flow.support.SimpleFlow.resume(SimpleFlow.java:169)
+	at org.springframework.batch.core.job.flow.support.SimpleFlow.start(SimpleFlow.java:144)
+	at org.springframework.batch.core.job.flow.FlowJob.doExecute(FlowJob.java:134)
+	at org.springframework.batch.core.job.AbstractJob.execute(AbstractJob.java:306)
+	at org.springframework.batch.core.launch.support.SimpleJobLauncher$1.run(SimpleJobLauncher.java:135)
+	at org.springframework.core.task.SyncTaskExecutor.execute(SyncTaskExecutor.java:50)
+	at org.springframework.batch.core.launch.support.SimpleJobLauncher.run(SimpleJobLauncher.java:128)
+	at org.springframework.batch.core.launch.support.CommandLineJobRunner.start(CommandLineJobRunner.java:362)
+	at org.springframework.batch.core.launch.support.CommandLineJobRunner.main(CommandLineJobRunner.java:592)
+Caused by: org.apache.ibatis.reflection.ReflectionException: There is no getter for property named 'schema' in 'class java.lang.String'
+	at org.apache.ibatis.reflection.Reflector.getGetInvoker(Reflector.java:422)
+	at org.apache.ibatis.reflection.MetaClass.getGetInvoker(MetaClass.java:164)
+	at org.apache.ibatis.reflection.wrapper.BeanWrapper.getBeanProperty(BeanWrapper.java:162)
+	at org.apache.ibatis.reflection.wrapper.BeanWrapper.get(BeanWrapper.java:49)
+	at org.apache.ibatis.reflection.MetaObject.getValue(MetaObject.java:122)
+	at org.apache.ibatis.scripting.xmltags.DynamicContext$ContextMap.get(DynamicContext.java:94)
+	at org.apache.ibatis.scripting.xmltags.DynamicContext$ContextAccessor.getProperty(DynamicContext.java:108)
+	at org.apache.ibatis.ognl.OgnlRuntime.getProperty(OgnlRuntime.java:2666)
+	at org.apache.ibatis.ognl.ASTProperty.getValueBody(ASTProperty.java:114)
+	at org.apache.ibatis.ognl.SimpleNode.evaluateGetValueBody(SimpleNode.java:212)
+	at org.apache.ibatis.ognl.SimpleNode.getValue(SimpleNode.java:258)
+	at org.apache.ibatis.ognl.Ognl.getValue(Ognl.java:467)
+	at org.apache.ibatis.ognl.Ognl.getValue(Ognl.java:431)
+	at org.apache.ibatis.scripting.xmltags.OgnlCache.getValue(OgnlCache.java:44)
+	at org.apache.ibatis.scripting.xmltags.TextSqlNode$BindingTokenParser.handleToken(TextSqlNode.java:77)
+	at org.apache.ibatis.parsing.GenericTokenParser.parse(GenericTokenParser.java:78)
+	at org.apache.ibatis.scripting.xmltags.TextSqlNode.apply(TextSqlNode.java:51)
+	at org.apache.ibatis.scripting.xmltags.MixedSqlNode.apply(MixedSqlNode.java:33)
+	at org.apache.ibatis.scripting.xmltags.DynamicSqlSource.getBoundSql(DynamicSqlSource.java:41)
+	at org.apache.ibatis.mapping.MappedStatement.getBoundSql(MappedStatement.java:292)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:81)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:148)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:141)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectOne(DefaultSqlSession.java:77)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:433)
+	... 41 common frames omitted
+[2018/02/09 14:20:39] [main] [o.s.b.c.l.s.SimpleJobLauncher] [INFO ] Job: [FlowJob: [name=BKP00075]] completed with the following parameters: [{schema=２７００, chohyoId=00075, jsr_batch_run_id=49}] and the following status: [FAILED]
+[2018/02/09 14:20:39] [main] [o.s.c.s.ClassPathXmlApplicationContext] [INFO ] Closing org.springframework.context.support.ClassPathXmlApplicationContext@13f5a29: startup date [Fri Feb 09 14:20:34 JST 2018]; root of context hierarchy
+
+原因
+https://teratail.com/questions/100612
+https://stackoverflow.com/questions/38948298/there-is-no-getter-for-property-named-tablename-in-class-java-lang-string
+String型は${}に入れるパラメータとしては使えないらしい。
+使う場合はMap型でマッピングする必要がある？
+
+解決策
+
+Map map = new HashMap();
+map.put("schema", schema);
+CTkinkojohoDTO KinkoInfo = new CTkinkojohoDTO();
+KinkoInfo = repository.getKinkoInfo(map);
+
+public CTkinkojohoDTO getKinkoInfo(Map map);
+
+<select id="getKinkoInfo" resultMap="getKinkoInfo" parameterType="map">
+        <![CDATA[
+            SELECT
+                設置金融機関コード,
+                設置店舗コード
+            FROM
+                ${schema}.ＣＴ金庫情報
+            WHERE
+                主キー = 1
+        ]]>
+</select>
+
+-------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
