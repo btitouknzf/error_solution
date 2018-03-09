@@ -1,0 +1,133 @@
+https://qiita.com/capsmalt/items/d20271ca1040509f92be
+
+適当な位置に展開
+（tomcatと同じ位置がいいかも）
+
+●1)サーバ作る
+cmd
+> C:\opt\wlp-webProfile7-17.0.0.4\wlp\bin
+> server.bat create server1
+
+●2)server.xml書き換え
+C:\opt\wlp-webProfile7-17.0.0.4\wlp\usr\servers\server1に移動
+server.xmlに以下のオプションを追加
+（<httpSession idLength="28" />のタグ）
+
+■■■■■before■■■■■
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="new server">
+
+    <!-- Enable features -->
+    <featureManager>
+        <feature>webProfile-7.0</feature>
+    </featureManager>
+
+    <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
+    <httpEndpoint id="defaultHttpEndpoint"
+                  httpPort="9080"
+                  httpsPort="9443" />
+                  
+    
+                  
+    <!-- Automatically expand WAR files and EAR files -->
+    <applicationManager autoExpand="true"/>
+
+</server>
+■■■■■before■■■■■
+
+
+■■■■■after■■■■■
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="new server">
+
+    <!-- Enable features -->
+    <featureManager>
+        <feature>webProfile-7.0</feature>
+    </featureManager>
+
+    <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
+    <httpEndpoint id="defaultHttpEndpoint"
+                  httpPort="9080"
+                  httpsPort="9443" />
+                  
+    <httpSession idLength="28" />
+                  
+    <!-- Automatically expand WAR files and EAR files -->
+    <applicationManager autoExpand="true"/>
+
+</server>
+■■■■■after■■■■■
+
+
+●3)起動
+
+プロジェクトをかためたwarファイルを
+C:\opt\wlp-webProfile7-17.0.0.4\wlp\usr\servers\server1\dropins
+に配置
+
+cmd
+> server.bat run server1
+
+●4)起動
+アクセスする
+http://localhost:9080/webbk/login/b-prelogin.do?bankcode=MTMwMQ==
+1301user000
+nttdb002
+
+
+------------------------------------------------------------------------
+
+Eclipse上で使う
+
+●1)プラグインのインストール
+ヘルプ⇒新規ソフトウェアのインストール
+作業対象に以下のURLを入力
+http://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/updates/wdt/oxygen_comp/
+
+以下のソフトウェアが一覧に表示される
+
+・IBM Eclipse Tools for Bluemix	
+・IBM WebSphere Application Server Migration Toolkit	
+・Resources / Cloud Foundry Tools	
+・UI / Cloud Foundry Tools	
+・WebSphere Configuration Migration Tool	
+・WebSphere? Application Server Developer Tools for Eclipse 17.0.0.4	
+・WebSphere? Application Server Liberty Tools for Eclipse 17.0.0.3	
+
+・WebSphere? Application Server Developer Tools for Eclipse 17.0.0.4
+にチェックを入れて次へからインストールを進めていく
+
+●2)ランタイムサーバの構築
+「サーバー」ビューで右クリック⇒新規⇒サーバ
+サーバーのタイプをIBM⇒「Liberty Server」選択
+サーバ名はご自由に。
+「次へ」を押下
+
+
+※Liberty ランタイム環境画面が出てきたら
+※配布されたWAPがあるので、「Choose an existing installation」をチェックし、パスに展開したWAPのディレクトリを入力する
+※⇒例：「C:\opt\wlp-webProfile7-17.0.0.4\wlp」
+※JREの選択はお好みで。
+
+新規サーバ画面で「新規」を押下
+サーバ名はご自由に
+テンプレートは「defaultServer」
+「完了」を押下
+
+新規サーバ画面に戻り、「完了」を押下
+
+
+●3)APの実行
+Tomcatと同じように実行・デバッグが可能
+
+
+参考：
+https://qiita.com/tomotagwork/items/3a63ac7955d053a4feb4#eclipse%E4%B8%8A%E3%81%ABwebspher-liberty-developer-tool%E3%81%AE%E5%B0%8E%E5%85%A5
+
+
+
+
+
+
+
+

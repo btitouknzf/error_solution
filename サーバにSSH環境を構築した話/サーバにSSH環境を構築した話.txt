@@ -333,6 +333,92 @@ null 値の式ではメソッドを呼び出せません。
     + CategoryInfo          : InvalidOperation: (SetValue:String) []、RuntimeException
     + FullyQualifiedErrorId : InvokeMethodOnNull
 
+⇒powershellのバージョンを確認 $PSVersionTable
+2.0ならダメ。
+バージョンを挙げる
+
+↓
+↓
+Microsoft Windows [Version 6.1.7601]
+Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+C:\windows\system32>cd C:\OpenSSH
+
+C:\OpenSSH>powershell.exe -ExecutionPolicy Bypass -File install-sshd.ps1
+[SC] SetServiceObjectSecurity SUCCESS
+[SC] ChangeServiceConfig SUCCESS
+ Granting SeAssignPrimaryTokenPrivilege to NT SERVICE\SSHD   ... successful
+mkdir : An item with the specified name C:\OpenSSH\logs already exists.
+At C:\OpenSSH\install-sshd.ps1:41 char:1
++ mkdir $logsdir > $null
++ ~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceExists: (C:\OpenSSH\logs:String) [New-It
+   em], IOException
+    + FullyQualifiedErrorId : DirectoryExist,Microsoft.PowerShell.Commands.New
+   ItemCommand
+
+sshd and ssh-agent services successfully installed
+
+C:\OpenSSH>powershell.exe -ExecutionPolicy Bypass -File uninstall-sshd.ps1
+sshd successfully uninstalled
+ssh-agent successfully uninstalled
+
+C:\OpenSSH>
+C:\OpenSSH>powershell.exe -ExecutionPolicy Bypass -File install-sshd.ps1
+[SC] SetServiceObjectSecurity SUCCESS
+[SC] ChangeServiceConfig SUCCESS
+ Granting SeAssignPrimaryTokenPrivilege to NT SERVICE\SSHD   ... successful
+sshd and ssh-agent services successfully installed
+
+C:\OpenSSH>ssh-keygen.exe -A
+
+C:\OpenSSH>ssh-keygen.exe -A
+ssh-keygen.exe: generating new host keys: RSA DSA ECDSA ED25519
+
+C:\OpenSSH>powershell.exe -ExecutionPolicy Bypass -File install-sshlsa.ps1
+
+C:\OpenSSH>ssh-keygen.exe -l -f ssh_host_rsa_key -E md5
+2048 MD5:f0:3c:8c:57:10:ef:fa:a4:5b:07:3e:da:6e:a3:99:40 Jiki-Admin@Jiki-Admin-P
+C@Jiki-Admin-PC (RSA)
+
+C:\OpenSSH>net start sshd
+sshd サービスを開始します.
+sshd サービスは正常に開始されました。
+
+
+C:\OpenSSH>
+
+
+powershell
+
+Windows PowerShell
+Copyright (C) 2015 Microsoft Corporation. All rights reserved.
+
+PS C:\windows\system32> cd ~/
+PS C:\Users\Jiki-Admin> ssh-keygen.exe
+Generating public/private rsa key pair.
+Enter file in which to save the key (C:\Users\Jiki-Admin/.ssh/id_rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in C:\Users\Jiki-Admin/.ssh/id_rsa.
+Your public key has been saved in C:\Users\Jiki-Admin/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:Yc3umeOjGxvOAsuthuCAC5NkHb9Zf3rWOz2T7bWwVuk Jiki-Admin@Jiki-Admin-PC@Jiki-Admin-PC
+The key's randomart image is:
++---[RSA 2048]----+
+|                 |
+|   .     o       |
+|  . o   o o      |
+| o . . o o       |
+|+.    + S .     .|
+|B   .o   o +   o |
+|++ o +  o B ..+ +|
+|... + oo *.+ +oE+|
+|   ... .*o+..ooo+|
++----[SHA256]-----+
+PS C:\Users\Jiki-Admin>
+
+
 ############
 
 Windows10の場合
