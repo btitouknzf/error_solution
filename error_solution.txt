@@ -2578,9 +2578,178 @@ public CTkinkojohoDTO getKinkoInfo(Map map);
 -------------------------------------------------------
 
 
+Eclipse上でgradleプロジェクトファイルをインポートしようとしたらエラー
+
+
+内容
 
 
 
+
+C:\gitbucket\IB2020_group\spring-batch-shinkinIB>gradlew --scan build
+Downloading https://services.gradle.org/distributions/gradle-3.5-all.zip
+
+Exception in thread "main" java.io.IOException: Unable to tunnel through proxy. Proxy returns "HTTP/1.1 407 407"
+        at sun.net.www.protocol.http.HttpURLConnection.doTunneling(HttpURLConnection.java:2124)
+        at sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:183)
+        at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1546)
+        at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1474)
+        at sun.net.www.protocol.https.HttpsURLConnectionImpl.getInputStream(HttpsURLConnectionImpl.java:254)
+        at org.gradle.wrapper.Download.downloadInternal(Download.java:60)
+        at org.gradle.wrapper.Download.download(Download.java:45)
+        at org.gradle.wrapper.Install$1.call(Install.java:62)
+        at org.gradle.wrapper.Install$1.call(Install.java:48)
+        at org.gradle.wrapper.ExclusiveFileAccessManager.access(ExclusiveFileAccessManager.java:69)
+        at org.gradle.wrapper.Install.createDist(Install.java:48)
+        at org.gradle.wrapper.WrapperExecutor.execute(WrapperExecutor.java:107)
+        at org.gradle.wrapper.GradleWrapperMain.main(GradleWrapperMain.java:61)
+
+C:\gitbucket\IB2020_group\spring-batch-shinkinIB>
+
+
+原因
+https://www.nyusatsu.e-hyogo.jp/hyogo/files/https_tunneling.pdf
+Java 8 Update 111 (8u111)から、HTTPSトンネリングのBasic認証の無効化がされておりそれが原因でした。
+
+解決策
+http://crmprogrammer38.hatenablog.com/entry/2017/05/15/103015
+STS.ini
+eclipse.iniに次のシステムプロパティを追加
+「-Djdk.http.auth.tunneling.disabledSchemes=」
+
+https://qiita.com/koooge/items/294e6a1000d99d92ae72
+
+プロパティファイルに追加
+~/.gradle/gradle.properties
+
+systemProp.http.proxyHost=www.somehost.org
+systemProp.http.proxyPort=8080
+systemProp.http.proxyUser=userid
+systemProp.http.proxyPassword=password
+systemProp.http.nonProxyHosts=*.nonproxyrepos.com|localhost
+
+systemProp.https.proxyHost=www.somehost.org
+systemProp.https.proxyPort=8080
+systemProp.https.proxyUser=userid
+systemProp.https.proxyPassword=password
+systemProp.https.nonProxyHosts=*.nonproxyrepos.com|localhost
+
+systemProp.jdk.http.auth.tunneling.disabledSchemes=""
+
+-------------------------------------------------------
+
+Eclipse上でgradleプロジェクトファイルをインポートしようとしたらエラー
+
+内容
+
+
+C:\gitbucket\IB2020_group\spring-batch-shinkinIB>gradlew --scan build
+:buildSrc:compileJava NO-SOURCE
+:buildSrc:compileGroovy UP-TO-DATE
+:buildSrc:processResources UP-TO-DATE
+:buildSrc:classes UP-TO-DATE
+:buildSrc:jar UP-TO-DATE
+:buildSrc:assemble UP-TO-DATE
+:buildSrc:compileTestJava NO-SOURCE
+:buildSrc:compileTestGroovy NO-SOURCE
+:buildSrc:processTestResources NO-SOURCE
+:buildSrc:testClasses UP-TO-DATE
+:buildSrc:test NO-SOURCE
+:buildSrc:check UP-TO-DATE
+:buildSrc:build UP-TO-DATE
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+_BuildScript_
+> _BuildScript_
+
+* Try:
+Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output.
+
+BUILD FAILED
+
+Total time: 3.191 secs
+
+C:\gitbucket\IB2020_group\spring-batch-shinkinIB>
+
+
+原因
+
+https://stackoverflow.com/questions/47157080/java-lang-classnotfoundexception-buildscript
+
+1
+down vote
+I think you have run into Groovy-Eclipse issue #370 (https://github.com/groovy/groovy-eclipse/issues/370). If you switch Groovy compiler level to 2.4 or below, this should not occur.
+
+Window > Preferences > Groovy > Compiler > Groovy Compiler settings section
+
+Groovyのコンパイラ・レベルを2.4以下に切り替えると、これは起こりません
+
+https://discuss.gradle.org/t/seemingly-trivial-additions-to-build-gradle-cause-buildscript-error/24386/5
+
+
+
+解決策
+groovyのコンパイラレベルを下げる
+のと、gradle用のものとは別にeclipse用のgroovyプラグインを入れる
+
+-------------------------------------------------------------
+Jschライブラリを使ったssh転送処理でエラー
+使用環境
+クライアント　win7
+サーバ　ubuntu
+STSから実行
+
+状況
+実行してエラー発生
+
+エラー内容
+
+com.jcraft.jsch.JSchException: failed to send channel request
+	at com.jcraft.jsch.Request.write(Request.java:65)
+	at com.jcraft.jsch.RequestSftp.request(RequestSftp.java:47)
+	at com.jcraft.jsch.ChannelSftp.start(ChannelSftp.java:237)
+	at com.jcraft.jsch.Channel.connect(Channel.java:152)
+	at com.jcraft.jsch.Channel.connect(Channel.java:145)
+	at jp.co.nttdata.shinkin.sftp.SFTP_transfer.SftpSample.connectChannelSftp(SftpSample.java:151)
+	at jp.co.nttdata.shinkin.sftp.SFTP_transfer.SftpSample.putFile(SftpSample.java:46)
+	at jp.co.nttdata.shinkin.sftp.SFTP_transfer.App.main(App.java:23)
+
+
+原因
+Javaの記述ではなく、サーバ側の設定に問題がある場合が多い。
+
+
+解決策
+https://stackoverflow.com/questions/14769164/jsch-error-failed-to-send-channel-request
+
+サーバ(ubuntu)上のsshd_configを編集した
+
+>sudo vi /etc/ssh/sshd_config
+
+「Subsystem sftp internal-sftp」
+を末尾に追記
+
+>sudo /etc/init.d/ssh restart
+
+再度実行で正常に処理された
+
+
+
+
+
+
+
+-------------------------------------------------------------
+
+com.jcraft.jsch.JSchException: HostKey has been changed: [10.9.52.127]:2222
+	at com.jcraft.jsch.Session.checkHost(Session.java:775)
+	at com.jcraft.jsch.Session.connect(Session.java:345)
+	at com.jcraft.jsch.Session.connect(Session.java:183)
+	at jp.co.nttdata.shinkin.sftp.SFTP_transfer.SftpSample.connectSession(SftpSample.java:128)
+	at jp.co.nttdata.shinkin.sftp.SFTP_transfer.SftpSample.putFile(SftpSample.java:44)
+	at jp.co.nttdata.shinkin.sftp.SFTP_transfer.App.main(App.java:23)
 
 
 

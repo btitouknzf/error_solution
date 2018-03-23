@@ -1,0 +1,102 @@
+１状況確認
+
+https://qiita.com/nobb_hero/items/3422b37ba2e9e3299680
+
+★power shellのバージョン確認
+PS> $PSVersionTable
+
+バージョンが2以前であればNG。
+最新のバージョン「5.1」ではない場合でも一応上げておく
+
+★.Netframeworkのバージョン確認
+プログラムのアンインストール画面
+.NET Framework 4.5 以上であればOK
+NGならインストールが必要
+https://qiita.com/busonx/items/acb54f852962426eb2ed
+
+★powershellのバージョンアップ
+> Set-ExecutionPolicy RemoteSigned
+> Install-WMF5.1.ps1
+> Set-ExecutionPolicy Restricted
+
+
+２ isoファイルを作成する。
+（DVDからisoファイルを抽出する例）
+infraRecorder
+https://ninite.com/
+
+
+3 ボックスの作成を始める。
+http://tech.nitoyon.com/ja/blog/2014/02/20/vagrant-win-guest/
+vagrant-windows設定してないけどいけた。（というか今のvagrantのバージョンに対応したパッケージがない？）
+
+
+
+
+
+
+
+https://qiita.com/nagomu/items/37f5b6fb63168ab13ace
+=================================================
+エラー
+
+The guest machine entered an invalid state while waiting for it
+to boot. Valid states are 'starting, running'. The machine is in the
+'paused' state. Please verify everything is configured
+properly and try again.
+
+If the provider you're using has a GUI that comes with it,
+it is often helpful to open that and watch the machine, since the
+GUI often has more helpful error messages than Vagrant can retrieve.
+For example, if you're using VirtualBox, run `vagrant up` while the
+VirtualBox GUI is open.
+
+The primary issue for this error is that the provider you're using
+is not properly configured. This is very rarely a Vagrant issue.
+
+GUIで確認するとwindowsが正しくシャットダウンできませんでした画面に・・・
+関係ない模様
+
+C:\仮想化環境構築\virtualProject\Win7>vagrant ssh
+ssh_exchange_identification: read: Connection reset
+
+つなげない
+⇒windowはSSHコマンドが標準化されてないから
+
+BIOS設定？
+⇒関係ないけど設定はした
+
+=================================================
+
+
+4 ネットワーク設定
+https://www.virment.com/vagrantfile-settings/
+
+
+
+5 プロキシ設定
+https://weblabo.oscasierra.net/vagrant-proxyconf/
+
+>vagrant plugin install vagrant-proxyconf
+
+>vagrant plugin list
+vagrant-proxyconfが表示されればOK
+
+
+・vagrantfileに設定を記載
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+.
+.
+.
+    if Vagrant.has_plugin?("vagrant-proxyconf")
+        config.proxy.http = "http://proxy.mycompany.co.jp:8080/"
+        config.proxy.https = "http://proxy.mycompany.co.jp:8080/"
+        config.proxy.no_proxy = "localhost,127.0.0.1"
+    end
+.
+.
+.
+end
+
+★何かエラーが起きてデバッグ実行したい場合
+https://qiita.com/ariarijp/items/92a291ac447af430c29c
