@@ -1817,7 +1817,7 @@ mavenに無いやつだったのでローカルで登録した
 [INFO] Finished at: 2018-01-23T17:23:53+09:00
 [INFO] Final Memory: 23M/102M
 [INFO] ------------------------------------------------------------------------
-
+●済
 -------------------------------------------------------
 マルチプロジェクト構成の時のコンパイルと実行方法
 terabatch
@@ -1860,7 +1860,7 @@ mvn -P develop clean dependency:copy-dependencies -DoutputDirectory=lib package
 [ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException
 
 jenkinsも親からUTを行う
-
+●済
 -------------------------------------------------------
 mavenでjarを作ってローカル起動した時にエラー
 
@@ -2021,18 +2021,24 @@ public class InputFileImpl implements InputFile {
     }
     */
     /*
-     * @Override public InputStream inputLayoutXml(String layoutXml) throws IOException { Resource resource =
-     * resourceLoader.getResource("classpath:" + layoutXml); 
-     * File xmlFile = resource.getFile();
-     * InputStream fileStream = new FileInputStream(xmlFile); return fileStream; }
+     public InputStream inputLayoutXml(String layoutXml) throws IOException {
+         
+         Resource resource = resourceLoader.getResource("classpath:" + layoutXml); 
+         File xmlFile = resource.getFile();
+         InputStream fileStream = new FileInputStream(xmlFile);
+         
+         return fileStream;
+     }
      */
 
 }
 
 
 urlから直接読み込めばうまくいく
-
+●済み
 -------------------------------------------------------
+
+http://www.atmarkit.co.jp/bbs/phpBB/viewtopic.php?topic=40302&forum=12
 
 xmlファイルをstringに変換するときにエラー
 原因はネームスペースの定義をしてないから。
@@ -2207,19 +2213,21 @@ java.lang.RuntimeException: 接頭辞'bs'のネームスペースが宣言されていません。
 	at java.lang.Thread.run(Thread.java:748)
 
 
-
+●済み
 -------------------------------------------------------
 FTPClientでIMAGE_FILE_TYPEの定数が使えない
 
 状況
 if (ftpCl.changeWorkingDirectory(imgLogoAdds)) {
-					ftpCl.setFileType(FTP.IMAGE_FILE_TYPE);
-					if (ftpCl.storeFile(newFileName, streamKinko)) {
-						ftpCl.site("chmod 757 " + newFileName);
-					} else {
-						return false;
-					}
-				}
+
+    ftpCl.setFileType(FTP.IMAGE_FILE_TYPE);
+
+    if (ftpCl.storeFile(newFileName, streamKinko)) {
+        ftpCl.site("chmod 757 " + newFileName);
+    } else {
+        return false;
+    }
+}
 
 
 エラー内容
@@ -2236,7 +2244,7 @@ Apache Commons Net 3.6 APIのライブラリを使っていたため
 解決策
 IMAGE_FILE_TYPE⇒BINARY_FILE_TYPEに変更する
 
-
+●済み
 -------------------------------------------------------
 使用環境
 java.lang.Error: Unresolved compilation problems: 
@@ -2278,6 +2286,8 @@ https://qa.atmarkit.co.jp/q/5818
 ⇒文字コードの問題？
 ワークスペース⇒テキスト・ファイル・エンコード
 ⇒MS932→UTF-8
+
+●済み
 -------------------------------------------------------
 使用環境
 
@@ -2431,6 +2441,7 @@ STSで実行、デバッグしたのにコンソールに表示されない。
 解決策
 「実行」⇒「実行の構成」⇒実行していた設定→「共通」
 標準入出力⇒コンソールに割り当て（A）（入力に必要）にチェックを入れる
+●済み
 -------------------------------------------------------
 使用環境
 STSで実行、デバッグしても起動しない。
@@ -2446,12 +2457,14 @@ STSで実行、デバッグしても起動しない。
 デフォルト・エントリーの復元をクリック
 「ブートストラップ・エントリー」「ユーザー・エントリー」にライブラリ・プロジェクト系が設定されたことを確認
 再度実行する。
+●済み
 -------------------------------------------------------
 使用環境
-mybatisでstring型を${}でパラメータを渡そうとしたらエラー
+mybatisでstring型を動的パラメータ（${}）で渡そうとしたらエラー
 
 状況
-KinkoInfo = repository.getKinkoInfo(schema);
+String tabelName = "hoge";
+HogeDTO hogeDto = repository.searchHogeTable(schema);
 
 
 <select id="getKinkoInfo" resultMap="getKinkoInfo" parameterType="string">
@@ -2466,7 +2479,22 @@ KinkoInfo = repository.getKinkoInfo(schema);
         ]]>
 </select>
 
-public CTkinkojohoDTO getKinkoInfo(String schema);
+<select id="searchHogeTable" resultMap="HogeDTO" parameterType="string">
+SELECT
+    hoge,
+    poge,
+FROM
+    ${tableName}_table
+WHERE
+    poge = '1'
+</select>
+
+public HogeDTO searchHogeTable(String pogeNumber);
+public interface HogeRepository {
+    HogeDTO searchHogeTable(String pogeNumber);
+}
+
+
 
 エラー内容
 [2018/02/09 14:20:39] [main] [o.s.b.c.s.AbstractStep] [ERROR] Encountered an error executing step BKP00075.step01 in job BKP00075
@@ -2574,7 +2602,7 @@ public CTkinkojohoDTO getKinkoInfo(Map map);
                 主キー = 1
         ]]>
 </select>
-
+●済み
 -------------------------------------------------------
 
 
@@ -2586,7 +2614,7 @@ Eclipse上でgradleプロジェクトファイルをインポートしようとしたらエラー
 
 
 
-C:\gitbucket\IB2020_group\spring-batch-shinkinIB>gradlew --scan build
+C:\hoge>gradlew --scan build
 Downloading https://services.gradle.org/distributions/gradle-3.5-all.zip
 
 Exception in thread "main" java.io.IOException: Unable to tunnel through proxy. Proxy returns "HTTP/1.1 407 407"
@@ -2635,7 +2663,7 @@ systemProp.https.proxyPassword=password
 systemProp.https.nonProxyHosts=*.nonproxyrepos.com|localhost
 
 systemProp.jdk.http.auth.tunneling.disabledSchemes=""
-
+●済み
 -------------------------------------------------------
 
 Eclipse上でgradleプロジェクトファイルをインポートしようとしたらエラー
@@ -2643,7 +2671,7 @@ Eclipse上でgradleプロジェクトファイルをインポートしようとしたらエラー
 内容
 
 
-C:\gitbucket\IB2020_group\spring-batch-shinkinIB>gradlew --scan build
+C:\hoge>gradlew --scan build
 :buildSrc:compileJava NO-SOURCE
 :buildSrc:compileGroovy UP-TO-DATE
 :buildSrc:processResources UP-TO-DATE
@@ -2693,7 +2721,7 @@ https://discuss.gradle.org/t/seemingly-trivial-additions-to-build-gradle-cause-b
 解決策
 groovyのコンパイラレベルを下げる
 のと、gradle用のものとは別にeclipse用のgroovyプラグインを入れる
-
+●済み
 -------------------------------------------------------------
 Jschライブラリを使ったssh転送処理でエラー
 使用環境
@@ -2736,7 +2764,7 @@ https://stackoverflow.com/questions/14769164/jsch-error-failed-to-send-channel-r
 再度実行で正常に処理された
 
 
-
+●済み
 
 
 

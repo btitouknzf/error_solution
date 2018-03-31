@@ -1,0 +1,121 @@
+GPUなしのPCでubuntu 16.04 を入れた時に解像度がおかしくなっていた時の話
+
+1920x1080にしたい
+
+ネットで調べてもnvidiaのドライバ入れろとかしかなかった
+
+→intelのグラフィックドライバーを入れる
+
+https://01.org/linuxgraphics/downloads
+ubuntu 16.04で検索
+
+INTEL GRAPHICS UPDATE TOOL FOR LINUX* OS V2.0.2
+Intel? Graphics Update Tool 2.0.2 for Ubuntu* 16.04, 64-bitをDL
+
+$ sudo apt update
+$ sudo apt upgrade
+
+$ sudo apt-get install ttf-ancient-fonts fonts-ancient-scripts
+$ cd ~/home/User/Download/
+$ sudo dpkg -i intel-graphics-update-tool_2.0.2_amd64.deb 
+で展開
+
+$ sudo intel-gaphics-update-tool
+でインストーラを起動して流れに沿ってインストール
+再起動
+
+解像度が治ってた
+
+
+無線LANを繋ぎたい
+GUI画面の右上の無線LANの接続設定から設定しても上手くいかなかった
+
+設定→ネットワーク→無線
+繋ぎたい無線LANの右端の>をクリック
+「［無線LAN］の編集」→Wi-Fiセキュリティ
+セキュリティ
+WPA&WPA2 Personal
+パスワード
+暗号化キーを入力
+
+保存
+で、無線LANを選択する
+
+リモート環境
+vnc ultravnc
+
+http://takaq1.plala.jp/contents/bean/vino/index.html
+http://takaq1.plala.jp/contents/bean/dconf-editor/index.html
+https://shattered-blog.com/archives/27412
+https://www.ipentec.com/document/linux-vncserver-realvnc-connect
+ファイアウォールの許可設定が必要
+
+
+
+ファンの回転制御
+BIOS設定
+biostar
+smart fan control
+CPU samrt Fan1→DISABLEDからAUTOへ
+Control Mode→Quietへ
+
+自動ログイン
+http://d.hatena.ne.jp/akamushi97/20140209/1391873735
+
+パッケージとカーネルの更新
+sudo apt-get update
+sudo apt-get upgrade
+
+
+
+ディレクトリを英語表記にする
+ディレクトリが日本語だと、いろいろ面倒なので、英語にします。
+以下のコマンドを実行。
+
+$ LANG=C xdg-usesr-dirs-gtk-update
+
+
+ftp
+1. sudo apt-get install vsftpd
+
+でFTPサーバーソフトのvsftpdをインストール。
+
+ 
+
+2. /etc/vsftpd.conf を編集する。 たぶんviとかvimで編集することになると思うが、root権限がない場合は sudo を前につけないと上書き禁止モードで開くことになる。
+
+sudo vim /etc/vsftpd.conf
+
+↓
+
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+編集作業その１
+
+３０行目あたりにある
+
+#write_enable=YES
+
+と
+
+#local_umask=022
+
+のコメントアウトを解除（＝「#」を削除）する。
+
+ 
+
+編集作業その２
+
+１３０行目あたりにある
+
+#ls_recurse_enable=YES
+
+のコメントアウトを解除する。
+
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+ 
+
+3.sudo service vsftpd restart
+
+編集が終わったら、上記コマンドでFTPサーバーを再起動。
