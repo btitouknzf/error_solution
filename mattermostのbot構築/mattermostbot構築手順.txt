@@ -1,0 +1,14 @@
+Outgoing Webhook - [EROR] Event POST failed, err=Post http:192.168.3.207: address forbidden #7529
+https://github.com/mattermost/mattermost-server/issues/7529
+
+Allow untrusted internal connections to
+https://docs.mattermost.com/administration/config-settings.html
+
+超簡単！MattermostにBOTを追加する
+https://vivibit.net/mattermost_bot/
+
+
+初心者がPHPプログラミングを始めるための基礎知識とXAMPPのインストール (2/2)
+http://www.atmarkit.co.jp/ait/articles/1403/07/news028_2.html
+
+
