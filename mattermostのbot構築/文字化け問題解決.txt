@@ -1,0 +1,10 @@
+xamppの日本語対応
+
+通常のxamppのままだとjsonで日本語を上手く返してくれない
+
+文字化け・非表示になってしまう問題の解消
+
+https://hombre-nuevo.com/programming/%E3%80%90php%E3%80%91%E6%96%87%E5%AD%97%E5%8C%96%E3%81%91%E5%AF%BE%E7%AD%96%E3%81%AE%E3%81%9F%E3%82%81php%E3%82%92%E6%97%A5%E6%9C%AC%E8%AA%9E%E5%8C%96%E3%80%90xampp%E3%80%91/
+
+PHP 配列のデータ表示
+http://zeropuro.com/blog/?p=395

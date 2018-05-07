@@ -1,0 +1,5 @@
+
+javaで外部クラスからprivate,protectedのメソッドを実行させる。
+http://language-and-engineering.hatenablog.jp/entry/20101111/p1
+http://pppurple.hatenablog.com/entry/2016/07/23/205446
+

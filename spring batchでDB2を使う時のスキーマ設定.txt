@@ -1,0 +1,25 @@
+spring batch ‚ÅDB2‚ð—p‚¢‚Ä‹N“®‚·‚é•û–@
+http://forum.spring.io/forum/spring-projects/data/22468-using-db2-datasource
+10:42 AM
+I use something like this to talk to db2:
+Code:
+  <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
+    lazy-init="true">
+    <property name="poolPreparedStatements" value="true" />
+    <property name="url" value="jdbc:db2://localhost:50000/HCA:driverType=4;currentSchema=DB2ADMIN;" />
+    <property name="driverClassName" value="com.ibm.db2.jcc.DB2Driver" />
+    <property name="username" value="username" />
+    <property name="password" value="password" />
+  </bean>
+I use the DB2Driver for the driverClassName, and the commons dbcp for the dataSource. I've used spring's SingleConnectionDataSource as the dataSource as well. In any case, I avoid the dataSource provided by DB2 and have had success.
+10:42 AM
+https://stackoverflow.com/questions/30994838/spring-batch-metadata-tables-in-different-schema
+10:44 AM
+jdbc:db2://server:50000/WRKLGHT:currentSchema=WRKSCHM;
+10:44 AM
+https://www.ibm.com/support/knowledgecenter/ja/SSPJLC_7.5.0/com.ibm.si.mpl.doc_7.5.0/install/t_configuring_apache_tomcat_for_db2_manually.html
+
+
+https://www.ibm.com/support/knowledgecenter/ja/SSPJLC_7.5.0/com.ibm.si.mpl.doc_7.5.0/install/t_configuring_apache_tomcat_for_db2_manually.html
+
+url="jdbc:db2://server:50000/WRKLGHT:currentSchema=WRKSCHM;"

@@ -2782,5 +2782,124 @@ com.jcraft.jsch.JSchException: HostKey has been changed: [10.9.52.127]:2222
 
 
 
+-------------------------------------------------------------
 
+
+使用環境
+springbatchで複数ステップによる実行をさせようとしたときにエラー
+
+状況
+org.springframework.beans.factory.parsing.BeanDefinitionParsingException
+
+エラー内容
+[2018/04/18 14:01:55] [main] [o.s.b.c.l.s.CommandLineJobRunner] [ERROR] Job Terminated in error: Configuration problem: The element [BKP00040.step02] is unreachable
+Offending resource: class path resource [META-INF/jobs/pdf/gyomuSyuryo/BKP00040/BKP00040.xml]
+org.springframework.beans.factory.parsing.BeanDefinitionParsingException: Configuration problem: The element [BKP00040.step02] is unreachable
+Offending resource: class path resource [META-INF/jobs/pdf/gyomuSyuryo/BKP00040/BKP00040.xml]
+	at org.springframework.beans.factory.parsing.FailFastProblemReporter.error(FailFastProblemReporter.java:70)
+	at org.springframework.beans.factory.parsing.ReaderContext.error(ReaderContext.java:85)
+	at org.springframework.beans.factory.parsing.ReaderContext.error(ReaderContext.java:72)
+	at org.springframework.batch.core.configuration.xml.AbstractFlowParser.doParse(AbstractFlowParser.java:169)
+	at org.springframework.batch.core.configuration.xml.InlineFlowParser.doParse(InlineFlowParser.java:61)
+	at org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser.parseInternal(AbstractSingleBeanDefinitionParser.java:85)
+	at org.springframework.beans.factory.xml.AbstractBeanDefinitionParser.parse(AbstractBeanDefinitionParser.java:61)
+	at org.springframework.batch.core.configuration.xml.JobParser.doParse(JobParser.java:121)
+	at org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser.parseInternal(AbstractSingleBeanDefinitionParser.java:85)
+	at org.springframework.beans.factory.xml.AbstractBeanDefinitionParser.parse(AbstractBeanDefinitionParser.java:61)
+	at org.springframework.beans.factory.xml.NamespaceHandlerSupport.parse(NamespaceHandlerSupport.java:74)
+	at org.springframework.beans.factory.xml.BeanDefinitionParserDelegate.parseCustomElement(BeanDefinitionParserDelegate.java:1411)
+	at org.springframework.beans.factory.xml.BeanDefinitionParserDelegate.parseCustomElement(BeanDefinitionParserDelegate.java:1401)
+	at org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader.parseBeanDefinitions(DefaultBeanDefinitionDocumentReader.java:172)
+	at org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader.doRegisterBeanDefinitions(DefaultBeanDefinitionDocumentReader.java:142)
+	at org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader.registerBeanDefinitions(DefaultBeanDefinitionDocumentReader.java:94)
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.registerBeanDefinitions(XmlBeanDefinitionReader.java:508)
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.doLoadBeanDefinitions(XmlBeanDefinitionReader.java:392)
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:336)
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:304)
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:181)
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:217)
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:188)
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:252)
+	at org.springframework.context.support.AbstractXmlApplicationContext.loadBeanDefinitions(AbstractXmlApplicationContext.java:127)
+	at org.springframework.context.support.AbstractXmlApplicationContext.loadBeanDefinitions(AbstractXmlApplicationContext.java:93)
+	at org.springframework.context.support.AbstractRefreshableApplicationContext.refreshBeanFactory(AbstractRefreshableApplicationContext.java:129)
+	at org.springframework.context.support.AbstractApplicationContext.obtainFreshBeanFactory(AbstractApplicationContext.java:613)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:514)
+	at org.springframework.context.support.ClassPathXmlApplicationContext.<init>(ClassPathXmlApplicationContext.java:139)
+	at org.springframework.context.support.ClassPathXmlApplicationContext.<init>(ClassPathXmlApplicationContext.java:83)
+	at org.springframework.batch.core.launch.support.CommandLineJobRunner.start(CommandLineJobRunner.java:290)
+	at org.springframework.batch.core.launch.support.CommandLineJobRunner.main(CommandLineJobRunner.java:592)
+
+原因
+xmlファイルの記述ミス
+https://stackoverflow.com/questions/20289814/beandefinitionparsingexception-configuration-the-element-step2-is-unreachabl
+解決策
+batch:stepタグにnext="step2"属性を指定する
+
+-------------------------------------------------------
+
+
+
+
+
+
+
+
+使用環境
+
+状況
+
+エラー内容
+
+npm ERR! Windows_NT 6.1.7601
+npm ERR! argv "C:\\Nodist\\v\\7.2.1\\node.exe" "C:\\Nodist\\npmv\\4.0.5\\bin\\npm-cli.js" "install" "hubot" "hubot-scr
+npm ERR! node v7.2.1
+npm ERR! npm  v4.0.5
+npm ERR! code ETIMEDOUT
+npm ERR! errno ETIMEDOUT
+npm ERR! syscall connect
+
+npm ERR! network connect ETIMEDOUT 151.101.72.162:443
+npm ERR! network This is most likely not a problem with npm itself
+npm ERR! network and is related to network connectivity.
+npm ERR! network In most cases you are behind a proxy or have bad network settings.
+npm ERR! network
+npm ERR! network If you are behind a proxy, please make sure that the
+npm ERR! network 'proxy' config is set properly.  See: 'npm help config'
+
+npm ERR! Please include the following file with any support request:
+npm ERR!     C:\hubot\mattermost-hubot\npm-debug.log
+
+C:\hubot\mattermost-hubot>
+C:\hubot\mattermost-hubot>npm config set registry http://registry.npmjs.org/
+
+原因
+プロキシ設定
+
+
+
+解決策
+npm config list
+https://qiita.com/flat-8-kiki/items/f71f5375a053fab01033
+
+
+
+
+
+https://qiita.com/murachi1208/items/71e34add1a5371eff1aa
+
+
+npm -g config set proxy http://U602896:7ujm6yhn@127.0.0.1:8080
+npm -g config set https-proxy http://U602896:7ujm6yhn@127.0.0.1:8080
+npm -g config set registry http://registry.npmjs.org/
+
+http://10.17.25.107:8065/hooks/bnb8fwdq4bywxq6e7ok7da33hc
+
+
+export PORT=18080
+export MATTERMOST_ENDPOINT=/hubot/incoming
+export MATTERMOST_TOKEN=jxh3dhx8yfn17ygo4pjrgqgrxy
+export MATTERMOST_INCOME_URL=http://192.168.11.224/hooks/bg54t5czcpyzuxjt9ssaozw9we
+export MATTERMOST_HUBOT_USERNAME=matter-bot
+windowsの場合は環境変数に入れる。
 
