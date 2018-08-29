@@ -1,0 +1,406 @@
+mattermostとredmine連携
+redmine-messager
+https://qiita.com/Yoto_3/items/417d40e900c65cae23ec
+https://qiita.com/betrue12/items/059c2424f27fd31969f9
+https://github.com/AlphaNodes/redmine_messenger
+http://tbpgr.hatenablog.com/entry/20120318/1332089778
+https://qiita.com/SoarTec-lab/items/0f68e2427c6c02eca0e7
+https://qiita.com/wukann/items/4ee5381696920faff5b2
+
+Microsoft Windows [Version 6.1.7601]
+Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+C:\Bitnami\redmine-3.3.1-0>cd C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle exec thin start -e production -p 3001 --prefix /redmine
+bundler: command not found: thin
+Install missing gem executables with `bundle install`
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>$ bundle exec thin start -e production^Z
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>^X
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle exec rake tmp:cache:clear
+Could not find rake-11.3.0 in any of the sources
+Run `bundle install` to install missing gems.
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle install
+Fetching source index from https://rubygems.org/
+Retrying source fetch due to error (2/3): Bundler::Fetcher::CertificateFailureError Could not verify the SSL certificate for https://rubygems.org/.
+There is a chance you are experiencing a man-in-the-middle attack, but most likely your system doesn't have the CA certificates needed for verification. For information about OpenSSL certificates, see bit.ly/ruby-ssl. To connect without using SSL, edit your Gemfile sources and change 'https' to 'http'.
+Retrying source fetch due to error (3/3): Bundler::Fetcher::CertificateFailureError Could not verify the SSL certificate for https://rubygems.org/.
+There is a chance you are experiencing a man-in-the-middle attack, but most likely your system doesn't have the CA certificates needed for verification. For information about OpenSSL certificates, see bit.ly/ruby-ssl. To connect without using SSL, edit your Gemfile sources and change 'https' to 'http'.
+Could not verify the SSL certificate for https://rubygems.org/.
+There is a chance you are experiencing a man-in-the-middle attack, but most
+likely your system doesn't have the CA certificates needed for verification. For
+information about OpenSSL certificates, see bit.ly/ruby-ssl. To connect without
+using SSL, edit your Gemfile sources and change 'https' to 'http'.
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle install --source http://rubygems.org/
+Unknown switches '--source'
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>C:\Bitnami\redmine-3.3.1-0
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>cd
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>cd C:\Bitnami\redmine-3.3.1-0
+
+C:\Bitnami\redmine-3.3.1-0>./use_redmine.bat
+'.' は、内部コマンドまたは外部コマンド、
+操作可能なプログラムまたはバッチ ファイルとして認識されていません。
+
+C:\Bitnami\redmine-3.3.1-0>use_redmine.bat
+
+C:\Bitnami\redmine-3.3.1-0>bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+Could not locate Gemfile or .bundle/ directory
+
+C:\Bitnami\redmine-3.3.1-0>bundle install --without development test
+Could not locate Gemfile
+
+C:\Bitnami\redmine-3.3.1-0>cd C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle install --without development test
+Fetching source index from https://rubygems.org/
+Retrying source fetch due to error (2/3): Bundler::Fetcher::CertificateFailureError Could not verify the SSL certificate for https://rubygems.org/.
+There is a chance you are experiencing a man-in-the-middle attack, but most likely your system doesn't have the CA certificates needed for verification. For information about OpenSSL certificates, see bit.ly/ruby-ssl. To connect without using SSL, edit your Gemfile sources and change 'https' to 'http'.
+Retrying source fetch due to error (3/3): Bundler::Fetcher::CertificateFailureError Could not verify the SSL certificate for https://rubygems.org/.
+There is a chance you are experiencing a man-in-the-middle attack, but most likely your system doesn't have the CA certificates needed for verification. For information about OpenSSL certificates, see bit.ly/ruby-ssl. To connect without using SSL, edit your Gemfile sources and change 'https' to 'http'.
+Could not verify the SSL certificate for https://rubygems.org/.
+There is a chance you are experiencing a man-in-the-middle attack, but most
+likely your system doesn't have the CA certificates needed for verification. For
+information about OpenSSL certificates, see bit.ly/ruby-ssl. To connect without
+using SSL, edit your Gemfile sources and change 'https' to 'http'.
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle install --without development test
+Fetching gem metadata from http://rubygems.org/...........
+Fetching version metadata from http://rubygems.org/...
+Fetching dependency metadata from http://rubygems.org/..
+Resolving dependencies....
+Installing rake 11.3.0
+Installing i18n 0.7.0
+Installing json 1.8.3
+Installing minitest 5.9.0
+Installing thread_safe 0.3.5
+Installing tzinfo 1.2.2
+Installing activesupport 4.2.7.1
+Installing builder 3.2.2
+Installing erubis 2.7.0
+Installing mini_portile2 2.1.0
+Installing pkg-config 1.1.7
+Installing nokogiri 1.6.8
+Installing rails-deprecated_sanitizer 1.0.3
+Installing rails-dom-testing 1.0.7
+Installing loofah 2.0.3
+Installing rails-html-sanitizer 1.0.3
+Installing actionview 4.2.7.1
+Installing rack 1.6.4
+Installing rack-test 0.6.3
+Installing actionpack 4.2.7.1
+Installing globalid 0.3.7
+Installing activejob 4.2.7.1
+Installing mime-types-data 3.2016.0521
+Installing mime-types 3.1
+Installing mail 2.6.4
+Installing actionmailer 4.2.7.1
+Installing actionpack-action_caching 1.1.1
+Installing actionpack-xml_parser 1.0.2
+Installing activemodel 4.2.7.1
+Installing arel 6.0.3
+Installing activerecord 4.2.7.1
+Installing addressable 2.4.0
+Using bundler 1.9.6
+Installing coderay 1.1.1
+Installing concurrent-ruby 1.0.2
+Installing css_parser 1.3.7
+Installing daemons 1.2.3
+Installing eventmachine 1.0.3
+Installing htmlentities 4.3.1
+Installing thor 0.19.1
+Installing railties 4.2.7.1
+Installing jquery-rails 3.1.4
+Installing mimemagic 0.3.2
+Installing mysql2 0.4.2
+Installing net-ldap 0.12.1
+Installing protected_attributes 1.1.3
+Installing ruby-openid 2.3.0
+Installing rack-openid 1.4.2
+Installing sprockets 3.7.0
+Installing sprockets-rails 3.2.0
+Installing rails 4.2.7.1
+Installing rbpdf-font 1.19.0
+Installing rbpdf 1.19.0
+Installing redcarpet 3.3.4
+Installing request_store 1.0.5
+Installing rmagick 2.15.4
+Installing roadie 3.1.1
+Installing roadie-rails 1.1.1
+Installing thin 1.6.1
+Installing tzinfo-data 1.2016.1
+Updating files in vendor/cache
+Bundle complete! 33 Gemfile dependencies, 60 gems now installed.
+Gems in the groups development and test were not installed.
+Use `bundle show [gemname]` to see where a bundled gem is installed.
+Post-install message from nokogiri:
+Nokogiri is built with the packaged libraries: libxml2-2.9.4, libxslt-1.1.29, zlib-1.2.8, libiconv-1.14.
+Post-install message from mysql2:
+
+======================================================================================================
+
+  You've installed the binary version of mysql2.
+  It was built using MySQL Connector/C version 6.1.6.
+  It's recommended to use the exact same version to avoid potential issues.
+
+  At the time of building this gem, the necessary DLL files were retrieved from:
+  http://cdn.mysql.com/Downloads/Connector-C/mysql-connector-c-6.1.6-win32.zip
+
+  This gem *includes* vendor/libmysql.dll with redistribution notice in vendor/README.
+
+======================================================================================================
+
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle exec rake tmp:cache:clear
+DL is deprecated, please use Fiddle
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle install --without development test
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+Warning: this Gemfile contains multiple primary sources. Using `source` more than once without a block is a security risk, and may result in installing unexpected gems. To resolve this warning, use a block to indicate which gems should come from the secondary source. To upgrade this warning to an error, run `bundle config disable_multisource true`.
+Could not find gem 'httpclient (>= 0) x86-mingw32' in any of the gem sources listed in your Gemfile or installed on this machine.
+Run `bundle install` to install missing gems.
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle install
+Warning: this Gemfile contains multiple primary sources. Using `source` more than once without a block is a security risk, and may result in installing unexpected gems. To resolve this warning, use a block to indicate which gems should come from the secondary source. To upgrade this warning to an error, run `bundle config disable_multisource true`.
+Fetching source index from https://rubygems.org/
+Retrying source fetch due to error (2/3): Bundler::Fetcher::CertificateFailureError Could not verify the SSL certificate for https://rubygems.org/.
+There is a chance you are experiencing a man-in-the-middle attack, but most likely your system doesn't have the CA certificates needed for verification. For information about OpenSSL certificates, see bit.ly/ruby-ssl. To connect without using SSL, edit your Gemfile sources and change 'https' to 'http'.
+Retrying source fetch due to error (3/3): Bundler::Fetcher::CertificateFailureError Could not verify the SSL certificate for https://rubygems.org/.
+There is a chance you are experiencing a man-in-the-middle attack, but most likely your system doesn't have the CA certificates needed for verification. For information about OpenSSL certificates, see bit.ly/ruby-ssl. To connect without using SSL, edit your Gemfile sources and change 'https' to 'http'.
+Could not verify the SSL certificate for https://rubygems.org/.
+There is a chance you are experiencing a man-in-the-middle attack, but most
+likely your system doesn't have the CA certificates needed for verification. For
+information about OpenSSL certificates, see bit.ly/ruby-ssl. To connect without
+using SSL, edit your Gemfile sources and change 'https' to 'http'.
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle install --without development test
+Warning: this Gemfile contains multiple primary sources. Using `source` more than once without a block is a security risk, and may result in installing unexpected gems. To resolve this warning, use a block to indicate which gems should come from the secondary source. To upgrade this warning to an error, run `bundle config disable_multisource true`.
+Fetching source index from https://rubygems.org/
+Retrying source fetch due to error (2/3): Bundler::Fetcher::CertificateFailureError Could not verify the SSL certificate for https://rubygems.org/.
+There is a chance you are experiencing a man-in-the-middle attack, but most likely your system doesn't have the CA certificates needed for verification. For information about OpenSSL certificates, see bit.ly/ruby-ssl. To connect without using SSL, edit your Gemfile sources and change 'https' to 'http'.
+Retrying source fetch due to error (3/3): Bundler::Fetcher::CertificateFailureError Could not verify the SSL certificate for https://rubygems.org/.
+There is a chance you are experiencing a man-in-the-middle attack, but most likely your system doesn't have the CA certificates needed for verification. For information about OpenSSL certificates, see bit.ly/ruby-ssl. To connect without using SSL, edit your Gemfile sources and change 'https' to 'http'.
+Could not verify the SSL certificate for https://rubygems.org/.
+There is a chance you are experiencing a man-in-the-middle attack, but most
+likely your system doesn't have the CA certificates needed for verification. For
+information about OpenSSL certificates, see bit.ly/ruby-ssl. To connect without
+using SSL, edit your Gemfile sources and change 'https' to 'http'.
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle install --without development test
+Using rake 11.3.0
+Using i18n 0.7.0
+Using json 1.8.3
+Using minitest 5.9.0
+Using thread_safe 0.3.5
+Using tzinfo 1.2.2
+Using activesupport 4.2.7.1
+Using builder 3.2.2
+Using erubis 2.7.0
+Using mini_portile2 2.1.0
+Using pkg-config 1.1.7
+Using nokogiri 1.6.8
+Using rails-deprecated_sanitizer 1.0.3
+Using rails-dom-testing 1.0.7
+Using loofah 2.0.3
+Using rails-html-sanitizer 1.0.3
+Using actionview 4.2.7.1
+Using rack 1.6.4
+Using rack-test 0.6.3
+Using actionpack 4.2.7.1
+Using globalid 0.3.7
+Using activejob 4.2.7.1
+Using mime-types-data 3.2016.0521
+Using mime-types 3.1
+Using mail 2.6.4
+Using actionmailer 4.2.7.1
+Using actionpack-action_caching 1.1.1
+Using actionpack-xml_parser 1.0.2
+Using activemodel 4.2.7.1
+Using arel 6.0.3
+Using activerecord 4.2.7.1
+Using addressable 2.4.0
+Using coderay 1.1.1
+Using concurrent-ruby 1.0.2
+Using css_parser 1.3.7
+Using daemons 1.2.3
+Using eventmachine 1.0.3
+Using htmlentities 4.3.1
+Using thor 0.19.1
+Using railties 4.2.7.1
+Using jquery-rails 3.1.4
+Using mimemagic 0.3.2
+Using mysql2 0.4.2
+Using net-ldap 0.12.1
+Using protected_attributes 1.1.3
+Using ruby-openid 2.3.0
+Using rack-openid 1.4.2
+Using bundler 1.9.6
+Using sprockets 3.7.0
+Using sprockets-rails 3.2.0
+Using rails 4.2.7.1
+Using rbpdf-font 1.19.0
+Using rbpdf 1.19.0
+Using redcarpet 3.3.4
+Using request_store 1.0.5
+Using rmagick 2.15.4
+Using roadie 3.1.1
+Using roadie-rails 1.1.1
+Using thin 1.6.1
+Using tzinfo-data 1.2016.1
+Updating files in vendor/cache
+Bundle complete! 33 Gemfile dependencies, 60 gems now installed.
+Gems in the groups development and test were not installed.
+Use `bundle show [gemname]` to see where a bundled gem is installed.
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle show httpclient (>= 0) x86-mingw32
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle install httpclient (>= 0) x86-mingw32
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+DL is deprecated, please use Fiddle
+Migrating redmine_lightbox2 (Redmine Lightbox 2)...
+Migrating redmine_wiki_unc (Redmine Wiki Unc plugin)...
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+Warning: this Gemfile contains multiple primary sources. Using `source` more than once without a block is a security risk, and may result in installing unexpected gems. To resolve this warning, use a block to indicate which gems should come from the secondary source. To upgrade this warning to an error, run `bundle config disable_multisource true`.
+Could not find gem 'httpclient (>= 0) x86-mingw32' in any of the gem sources listed in your Gemfile or installed on this machine.
+Run `bundle install` to install missing gems.
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+DL is deprecated, please use Fiddle
+Migrating redmine_lightbox2 (Redmine Lightbox 2)...
+Migrating redmine_wiki_unc (Redmine Wiki Unc plugin)...
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>gem install httpclient
+ERROR:  Could not find a valid gem 'httpclient' (>= 0), here is why:
+          Unable to download data from https://rubygems.org/ - SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (https://api.rubygems.org/latest_specs.4.8.gz)
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle install httpclient
+ERROR: "bundle install" was called with arguments ["httpclient"]
+Usage: "bundle install [OPTIONS]"
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle install httpclient
+ERROR: "bundle install" was called with arguments ["httpclient"]
+Usage: "bundle install [OPTIONS]"
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle -v
+Bundler version 1.9.6
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>gem install httpclient
+ERROR:  Could not find a valid gem 'httpclient' (>= 0), here is why:
+          Unable to download data from https://rubygems.org/ - SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (https://api.rubygems.org/latest_specs.4.8.gz)
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>gem install httpclient
+ERROR:  Could not find a valid gem 'httpclient' (>= 0), here is why:
+          Unable to download data from https://rubygems.org/ - SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (https://api.rubygems.org/latest_specs.4.8.gz)
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+DL is deprecated, please use Fiddle
+Migrating redmine_lightbox2 (Redmine Lightbox 2)...
+Migrating redmine_wiki_unc (Redmine Wiki Unc plugin)...
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>gem install httpclient
+ERROR:  Could not find a valid gem 'httpclient' (>= 0), here is why:
+          Unable to download data from https://rubygems.org/ - SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (https://api.rubygems.org/latest_specs.4.8.gz)
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>gem install httpclient --source http://rubygems.org/
+Fetching: httpclient-2.8.3.gem (100%)
+Successfully installed httpclient-2.8.3
+Parsing documentation for httpclient-2.8.3
+Installing ri documentation for httpclient-2.8.3
+Done installing documentation for httpclient after 4 seconds
+WARNING:  Unable to pull data from 'https://rubygems.org/': SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (https://api.rubygems.org/latest_specs.4.8.gz)
+1 gem installed
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+Could not find gem 'slim-rails (>= 0) x86-mingw32' in any of the gem sources listed in your Gemfile or installed on this machine.
+Run `bundle install` to install missing gems.
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>gem install slim-rails --source http://rubygems.org/
+Fetching: tilt-2.0.8.gem (100%)
+Successfully installed tilt-2.0.8
+Fetching: temple-0.8.0.gem (100%)
+Successfully installed temple-0.8.0
+Fetching: slim-3.0.9.gem (100%)
+Successfully installed slim-3.0.9
+Fetching: slim-rails-3.1.3.gem (100%)
+Successfully installed slim-rails-3.1.3
+Parsing documentation for slim-3.0.9
+Installing ri documentation for slim-3.0.9
+Parsing documentation for slim-rails-3.1.3
+Installing ri documentation for slim-rails-3.1.3
+Parsing documentation for temple-0.8.0
+Installing ri documentation for temple-0.8.0
+Parsing documentation for tilt-2.0.8
+Installing ri documentation for tilt-2.0.8
+Done installing documentation for slim, slim-rails, temple, tilt after 2 seconds
+WARNING:  Unable to pull data from 'https://rubygems.org/': SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (https://api.rubygems.org/latest_specs.4.8.gz)
+4 gems installed
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+Could not find gem 'validate_url (>= 0) x86-mingw32' in any of the gem sources listed in your Gemfile or installed on this machine.
+Run `bundle install` to install missing gems.
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>gem install validate_url --source http://rubygems.org/
+Fetching: validate_url-1.0.2.gem (100%)
+Successfully installed validate_url-1.0.2
+Parsing documentation for validate_url-1.0.2
+Installing ri documentation for validate_url-1.0.2
+Done installing documentation for validate_url after 0 seconds
+WARNING:  Unable to pull data from 'https://rubygems.org/': SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (https://api.rubygems.org/latest_specs.4.8.gz)
+1 gem installed
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+DL is deprecated, please use Fiddle
+rake aborted!
+Mysql2::Error: Can't connect to MySQL server on '127.0.0.1' (10061)
+C:/Bitnami/redmine-3.3.1-0/apps/redmine/htdocs/app/models/custom_field.rb:36:in `<class:CustomField>'
+C:/Bitnami/redmine-3.3.1-0/apps/redmine/htdocs/app/models/custom_field.rb:18:in `<top (required)>'
+C:/Bitnami/redmine-3.3.1-0/apps/redmine/htdocs/lib/redmine/field_format.rb:90:in `field_attributes'
+C:/Bitnami/redmine-3.3.1-0/apps/redmine/htdocs/lib/redmine/field_format.rb:93:in `<class:Base>'
+C:/Bitnami/redmine-3.3.1-0/apps/redmine/htdocs/lib/redmine/field_format.rb:50:in `<module:FieldFormat>'
+C:/Bitnami/redmine-3.3.1-0/apps/redmine/htdocs/lib/redmine/field_format.rb:21:in `<module:Redmine>'
+C:/Bitnami/redmine-3.3.1-0/apps/redmine/htdocs/lib/redmine/field_format.rb:20:in `<top (required)>'
+C:/Bitnami/redmine-3.3.1-0/apps/redmine/htdocs/lib/redmine.rb:40:in `<top (required)>'
+C:/Bitnami/redmine-3.3.1-0/apps/redmine/htdocs/config/initializers/30-redmine.rb:6:in `<top (required)>'
+C:/Bitnami/redmine-3.3.1-0/apps/redmine/htdocs/config/environment.rb:14:in `<top (required)>'
+Tasks: TOP => redmine:plugins:migrate => environment
+(See full trace by running task with --trace)
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+DL is deprecated, please use Fiddle
+Migrating redmine_lightbox2 (Redmine Lightbox 2)...
+Migrating redmine_messenger (Redmine Messenger)...
+== 1 CreateMessengerSettings: migrating =======================================
+-- create_table(:messenger_settings)
+   -> 0.2652s
+== 1 CreateMessengerSettings: migrated (0.2652s) ==============================
+
+== 2 AddDefaultMentions: migrating ============================================
+-- add_column(:messenger_settings, :default_mentions, :string)
+   -> 0.3744s
+== 2 AddDefaultMentions: migrated (0.3744s) ===================================
+
+== 3 AddPrivateSettings: migrating ============================================
+-- add_column(:messenger_settings, :post_private_contacts, :integer, {:default=>0, :null=>false})
+   -> 0.2652s
+-- add_column(:messenger_settings, :post_private_db, :integer, {:default=>0, :null=>false})
+   -> 0.2340s
+== 3 AddPrivateSettings: migrated (0.5148s) ===================================
+
+Migrating redmine_wiki_unc (Redmine Wiki Unc plugin)...
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>--source http://rubygems.org/
+
+C:\Bitnami\redmine-3.3.1-0\apps\redmine\htdocs>

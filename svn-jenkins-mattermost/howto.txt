@@ -1,0 +1,26 @@
+1.jenkins用サーバのローカルにmaven・jdkをインストールする
+いつもどおりの設定でOK
+環境変数周りもいつもどおりでOK
+
+
+
+2.jenkinsにプラグインを入れる
+subversion
+Maven Integration
+jacoco
+redmine_messenger
+
+3.mattermost notificationの設定
+
+
+
+3.jenkinsのjdk、mavenの設定
+
+
+4.jobの作成・設定
+
+
+https://tokkan.net/web/jenkins3.html
+https://gloryof.hatenablog.com/entry/20130713/1373679979
+http://satoshiyamamoto.github.io/blog/2014/03/01/java-ci-3/
+https://qiita.com/d-yosh/items/4c6141a0981379a5c8e2
