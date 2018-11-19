@@ -1,0 +1,4 @@
+windows-webdriveri/o-java-spring UItest
+https://developers.freee.co.jp/entry/lets-get-started-e2e-test-with-webdriver-io
+https://qiita.com/Ueno1969/items/c22a6387eaf6e8131f2f
+http://blog.naoshihoshi.com/entry/2018/06/25/113000

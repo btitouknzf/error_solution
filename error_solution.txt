@@ -2996,3 +2996,27 @@ job-repositoryタグにmax-varchar-length属性を追加する。
 https://qiita.com/sndr/items/c853d7e0b4f650b94be4
 
 https://github.com/spring-projects/spring-batch/blob/master/spring-batch-docs/asciidoc/job.adoc
+
+
+---------------------------------------------------------------------------------------------
+
+使用環境
+テーブルが数値項目でNULLが許可されているカラムにNULLをセットすると
+1:22 PM
+
+cseとかで見るとたしかにNULLがセットされているのですが
+1:23 PM
+項目をdto.getJtac_CustomerNoBranch()でもってくるとｚ「0」が入っていたりしませんか？
+1:24 PM
+ＪＴチェック済持込の需要家番号枝番
+状況
+SQL上ではNullが入っているのに、javaでDTOに格納した際に0が格納される
+
+https://qiita.com/momosetkn/items/9c3d42a1457cacc0f0ec
+
+原因
+テーブル定義にDEFAULT 0が設定されているため
+
+------------------------------------------------------------------------------------
+
+
