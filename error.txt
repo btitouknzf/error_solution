@@ -3055,5 +3055,162 @@ https://stackoverflow.com/questions/28457107/spring-batch-scope-issue-while-usin
 
 ----------------------------------------------------------------
 
+内容
+DB2のバージョンをv11.1.2 fixpack2からv11.1.3.3 fixpack3に変更後、
+mavenにてRepositoryTest実施
 
+### Error querying database.  Cause: com.ibm.db2.jcc.am.SqlDataException: DB2 SQL Error: SQLCODE=-180, SQLSTATE=22007, SQLERRMC=null, DRIVER=4.23.42
+### The error may exist in jp/repository/Hoge/HogeRepository.xml
+### The error may involve jp.repository.Hoge.HogeRepository.select_MainTable_001-Inline
+### The error occurred while setting parameters
+### SQL: SELECT * FROM HOGESCHEMA.POGETABLE WHERE HOGESCHEMA.POGETABLE.hoge1 = RIGHT('0000000000' || TO_CHAR(?),10) AND ( ( HOGESCHEMA.POGETABLE.puge1 LIKE CONCAT(?,'%') OR HOGESCHEMA.POGETABLE.puge2 LIKE CONCAT(?,'%') ) OR ( HOGESCHEMA.POGETABLE.hogehoge1 LIKE CONCAT(?,'%') AND HOGESCHEMA.POGETABLE.pageStatus >= 32 ) )
+### Cause: com.ibm.db2.jcc.am.SqlDataException: DB2 SQL Error: SQLCODE=-180, SQLSTATE=22007, SQLERRMC=null, DRIVER=4.23.42
+; SQL []; DB2 SQL Error: SQLCODE=-180, SQLSTATE=22007, SQLERRMC=null, DRIVER=4.23.42; nested exception is com.ibm.db2.jcc.am.SqlDataException: DB2 SQL Error: SQLCODE=-180, SQLSTATE=22007, SQLERRMC=null, DRIVER=4.23.42
+	at org.springframework.jdbc.support.SQLExceptionSubclassTranslator.doTranslate(SQLExceptionSubclassTranslator.java:82)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:73)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:81)
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:73)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:446)
+	at com.sun.proxy.$Proxy36.selectList(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:230)
+	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:137)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:75)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:59)
+	at com.sun.proxy.$Proxy38.select_MainTable_001(Unknown Source)
+	at jp.repository.Hoge.HogeRepositoryTest.repositoryTest(HogeRepositoryTest.java:180)
+	... 44 more
+Caused by: com.ibm.db2.jcc.am.SqlDataException: DB2 SQL Error: SQLCODE=-180, SQLSTATE=22007, SQLERRMC=null, DRIVER=4.23.42
+	at com.ibm.db2.jcc.am.ld.a(ld.java:802)
+	at com.ibm.db2.jcc.am.ld.a(ld.java:66)
+	at com.ibm.db2.jcc.am.ld.a(ld.java:140)
+	at com.ibm.db2.jcc.am.aq.c(aq.java:2807)
+	at com.ibm.db2.jcc.am.aq.a(aq.java:2244)
+	at com.ibm.db2.jcc.t4.bb.r(bb.java:1463)
+	at com.ibm.db2.jcc.t4.bb.l(bb.java:588)
+	at com.ibm.db2.jcc.t4.bb.d(bb.java:98)
+	at com.ibm.db2.jcc.t4.p.c(p.java:44)
+	at com.ibm.db2.jcc.t4.vb.j(vb.java:162)
+	at com.ibm.db2.jcc.am.aq.nb(aq.java:2239)
+	at com.ibm.db2.jcc.am.bq.a(bq.java:4637)
+	at com.ibm.db2.jcc.am.bq.b(bq.java:4154)
+	at com.ibm.db2.jcc.am.bq.qc(bq.java:2874)
+	at com.ibm.db2.jcc.am.bq.execute(bq.java:2849)
+	at org.apache.commons.dbcp2.DelegatingPreparedStatement.execute(DelegatingPreparedStatement.java:198)
+	at org.apache.commons.dbcp2.DelegatingPreparedStatement.execute(DelegatingPreparedStatement.java:198)
+	at net.sf.log4jdbc.PreparedStatementSpy.execute(PreparedStatementSpy.java:418)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:63)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:79)
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:63)
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:324)
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:156)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:109)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:83)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:148)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:141)
+	at sun.reflect.GeneratedMethodAccessor85.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:433)
+	... 51 more
+[2018/12/04 12:26:47] [main] [j.c.n.s.r.p.d.B.HogeRepositoryTest] [ERROR] 9件のAssertionErrorが発生しています
+Tests run: 2, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 226.489 sec <<< FAILURE! - in jp.repository.Hoge.HogeRepositoryTest
+jp.repository.Hoge.HogeRepositoryTest  Time elapsed: 225.49 sec  <<< FAILURE!
+java.lang.AssertionError: 9件のAssertionErrorが発生しています
+	at jp.repository.HogeRepositoryTest.creanUpAfterTest(HogeRepositoryTest.java:144)
+
+[2018/12/04 12:26:47] [Thread-1] [o.s.c.s.GenericApplicationContext] [INFO ] Closing org.springframework.context.support.GenericApplicationContext@2f8dad04: startup date [Tue Dec 04 12:23:03 JST 2018]; root of context hierarchy
+
+Results :
+
+Failed tests: 
+  HogeRepositoryTest.creanUpAfterTest:144 9件のAssertionErrorが発生しています
+
+Tests run: 2, Failures: 1, Errors: 0, Skipped: 0
+
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO] 
+[INFO] testProject-parent 1.0-SNAPSHOT .................. SUCCESS [  0.704 s]
+[INFO] testProject-env .................................. SUCCESS [  2.849 s]
+[INFO] testProject 1.0.0-SNAPSHOT ....................... FAILURE [06:14 min]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 06:18 min
+[INFO] Finished at: 2018-12-04T12:26:48+09:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.19.1:test (default-test) on project testProject: There are test failures.
+[ERROR] 
+[ERROR] Please refer to C:\Users\Jiki-Admin\.jenkins\workspace\000_testProject-parent single_Test\testProject\target\surefire-reports for the individual test results.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <goals> -rf :testProject
+Build step 'Mavenの呼び出し' marked build as failure
+Finished: FAILURE
+
+
+原因
+
+tableにはDate型やTIMESTAMP型などの設定はしていなかったが、
+TO_CHAR関数を使用し、フォーマットを指定していなかったことが原因
+
+SELECT
+    *
+FROM
+    HOGESCHEMA.POGETABLE
+WHERE
+    HOGESCHEMA.POGETABLE.hoge1 = RIGHT('0000000000' || TO_CHAR(?),10)
+AND
+(
+    (
+        HOGESCHEMA.POGETABLE.puge1 LIKE CONCAT(?,'%')
+        OR
+        HOGESCHEMA.POGETABLE.puge2 LIKE CONCAT(?,'%')
+    )
+    OR
+    (
+        HOGESCHEMA.POGETABLE.hogehoge1 LIKE CONCAT(?,'%')
+        AND
+        HOGESCHEMA.POGETABLE.pageStatus >= 32
+    )
+)
+
+対処
+TO_CHAR関数にフォーマットを追加する
+
+SELECT
+    *
+FROM
+    HOGESCHEMA.POGETABLE
+WHERE
+    HOGESCHEMA.POGETABLE.hoge1 = RIGHT('0000000000' || TO_CHAR(?,'YYYYMMDD'),10)
+AND
+(
+    (
+        HOGESCHEMA.POGETABLE.puge1 LIKE CONCAT(?,'%')
+        OR
+        HOGESCHEMA.POGETABLE.puge2 LIKE CONCAT(?,'%')
+    )
+    OR
+    (
+        HOGESCHEMA.POGETABLE.hogehoge1 LIKE CONCAT(?,'%')
+        AND
+        HOGESCHEMA.POGETABLE.pageStatus >= 32
+    )
+)
+
+参考
+
+備考
+なんで元々のSQLで動いていたかは不明。
+fixPackが更新されてTO_CHARの使い方が厳密になった・・？
+
+----------------------------------------------------------------
 
